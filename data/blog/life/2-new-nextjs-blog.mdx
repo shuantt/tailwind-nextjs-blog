@@ -4,59 +4,64 @@ date: '2024-11-25'
 authors: ['default']
 draft: false
 tags: ['react', 'next.js', 'tailwind', 'blog']
-summary: 使用開源模板 (感謝作者 timlrx) 重架部落格，紀錄一下過程和遇到的問題，順便推廣一下這麼棒的開源專案。
+summary: 使用開源模板重架部落格(感謝作者 timlrx) ，紀錄一下過程和遇到的問題，順便推廣一下這個超讚的開源專案！
 ---
 
-## 為什麼搬家？
+## 為什麼一下又搬家？
 
-在尋找 react 資源的時候，意外發現 Eason Chang 大大的鐵人賽文章 ***「從零開始打造炫砲個人部落格系列簡介 - Modern Next.js Blog 系列」***，設計和功能都精準命中我的需求，而且一看到可以用 tailwind 就迫不及待想搬離 hexo，因為 hexo 主體改起來真的太麻煩。不論是 js 還是 css 寫法我都不喜歡。本來想跟著 30 天文章實作，練習 next.js 和熟悉套件，但礙於目前太忙，由於 Eason 的系列其實是參考 timlrx 的開源專案，最終決定使用原作者的 [Repo](https://github.com/timlrx/tailwind-nextjs-starter-blog)，提供的功能也更加完整。
+尋找 react 學習資源時，意外發現 Eason Chang 大大鐵人賽文章 **[從零開始打造炫砲個人部落格」系列簡介 - Modern Next.js Blog 系列](https://ithelp.ithome.com.tw/articles/10291960)**，美觀和功能都精準命中我的需求，尤其看到使用 tailwind 就迫不及待想搬家，因為 hexo 改起來真的很煩，不論是 ejs 還是 sass 寫法我都不喜歡。原本計畫跟著 30 天文章實作但實在沒時間，且有看到 Eason 是參考另一位大神 timlrx 的 [開源專案](https://github.com/timlrx/tailwind-nextjs-starter-blog)做的，因為專案真的非常完善，最終決定直接搬來用。
 
-## 專案包含哪些功能？
+## 這個專案包含哪些功能？
 
-- Markdown 生成靜態內容
+- 使用 Markdown 生成靜態內容
 - Dark Mode (包含深色/淺色/系統顏色)
-- 文章 tags、頁碼、prev & next 貼文切換
-- Comments 系統 (支援 giscus、utterances、disqus)
-- kbar ( ctrl + k ) 全文搜尋
-- Markdown TOC (Table Of Content, 雖然只自帶置頂版本)
-- 可設定巢狀路由 (也不是像 hexo 使用日期)
-- 可調整 code block 樣式主題 (prisma.css)
-- 多種貼文 layout、summary、複數作者
+- tags 分類、prev & next 前後貼文切換
+- 留言系統 (支援 giscus、utterances、disqus)
+- 全文搜尋 kbar ( ctrl + k ) 
+- Markdown TOC (Table Of Content, 但只提供置頂版)
+- 容易設定的巢狀路由 (不像 hexo 使用日期)
+- 提供 SEO、Newsletter、RSS、Google Analytics 等功能可選擇性開啟
+- 可調整 Code block 樣式 (prisma.css)
+- 多種貼文 layout、summary 預覽、複數作者
 - 好看的作品集 (Projects) 和關於我 (About) 頁面
-- tailwind config 快速調整主題色系
-- 更容易調整 (我就是覺得 next.js 和 tailwind 比 hexo 更好修改)
-  - 對不使用這兩個技術的人來說是缺點，但 hexo 也有同樣問題 (舊部落格主題就使用我沒寫過的 ejs 和 sass)
-- 重點是，真的真的很好看，覺得比 hexo 目前有的樣式都好看!!!
+- 可透過 tailwind config 快速調整主題色系
+- 使用 react + tailwind 比 hexo 更好修改。相反對不使用這兩個技術的人來說是缺點，但寫 ejs 和 sass 使我心累
+- 比 hexo 模板更有現代感！**就真的真的很好看**！(個人喜好XD)
 
 ## 遇到的問題
 
-其實幾乎是開箱即用，但還是用了兩天熟悉專案結構和依賴套件，尤其是 contentlayer 的使用，以下是花了較多時間的部分：
+幾乎是開箱後代入個人設定後就可使用，但還是花幾天熟悉專案結構和做個人化設定，尤其是卡在調整 `contentlayer` 的部分，具體遇到以下問題：
 
-- 研究 `giscus` 留言系統 (其實也提供原本 hexo 使用的 `utterance`，但我覺得留言放在 discussion 是更好的主意)
-- ***關於 contentlayer: 結果在 prod 部署後 draft = true 設定才會生效就不會被渲染了 ... 整個白忙一場，其實也有試著將 isProduction 相關設定移除，但可能沒有移除全部，下面這串看看就算了***
-  - 無法隱藏 `draft = true` 文章的問題 (這點也影響 tags 顯示)
-  - 嘗試使用 filter 來過濾 tags，但發現就算數字顯示變少，點進 tags 還是會出現多篇，因為 contentlayer 會生成所有文章，只有顯示的數字不同
-  - 即使將文章檔案從 `/data/blog` 中移除，原本 generated 的內容還是會殘留在 `/.contentlayer` 資料夾中，導致 tags 顯示不正確
-  - 因為一直跳出 `contentlayer 可能在 window 上運作不如預期`，還以為上述問題可能是套件有錯誤，努力翻官方文件和 issue，最後發現似乎只是警告
-  - 因為有問題的部分都是 contentlayer，試著看官方文件和問 GPT 修改 `.contentlayer.config.ts`，但仍會生成不想要的內容，最後決定手動處理：
-    - 新增 `data/draft` 資料夾，將草稿貼文移動到這裡避免生成
-    - 本地測試時如有貼文調整，手動清除 `.contentlayer/generated` 再重新讓 contentlayer 去 generated json
-  - 雖然解法很爛，但也沒那麼麻煩，未來如果找到自動化方法再來更新。
+- 本機測試時無法隱藏 `draft = true` 的文章，也影響 tags 計算
+- 移除文章後 `.contentlayer/generated` 的 json 檔案仍會殘留，導致頁面顯示不正確
+- 一直跳出 `contentlayer 可能在 window 上運作不如預期`，還以為是 win 環境有錯誤，搞半天發現似乎只是警告
+- 花式修改失敗後決定手動解決，將草稿文章移動到外層資料夾。
+
+**沒想到 ... 部署到正式站後 `draft = true` 就生效了，整個白忙一場。** 我其實是有看到環境相關的語法，也有測試將 isProduction 相關設定移除，但可能還是漏掉某些地方導致本地測試不正確。
+
+**結論：專案很完整不要懷疑大神寫錯，部署就對了!(哭)**
+
+## 簡單的基本設定
+
+其實可以專案 clone 下來後就直接部署，但我還是有做一些基本設定：
+
+- 調整 siteMetadata 
+- 選擇 comment 套件，附上我使用的 [giscus](https://github.com/giscus/giscus)
+- env 根據留言系統加入環境變數資料
+- google analytics 除了 siteMetadata 設定外，還可能需要修改 `next.config.js` 中將網域加入白名單
 
 ## 自己調整的部分
 
-- **首頁樣式：** 調整了空間寬高，加了點文字和圖片 (想要有點自己的風格)
-- **TechNote 分類：** 如首頁提到的新增了 `TechNote` 分類，個人還是喜歡有導覽列的技術文件，也不想把部落格放一堆瑣碎的筆記，預計使用 docusaurus 架設
-- **字體樣式：** 因原作者是主要使用英文，標題如果是中文樣式不好看，字體太粗、文字太擠，因此做了點微調，不要使用 extrabold 和 tight
-- **載入留言：** 原本作者只放了一個 `Load Comments` 的字樣，樣式設計的不像按鈕很不直覺，因此我改成更像按鈕的樣式
-- **側邊目錄 (TOC)**: 我的學習習慣是先看大綱再看細節，缺乏 TOC 的文章我覺得不是很好掌握脈絡。原作者表示因為喜好，他只做了置頂 TOC，但我還是喜歡目錄固定在頁面上，因此加入了 Desktop 版本的側邊固定目錄。
-  - [針對 TOC 的 Issue](https://github.com/timlrx/tailwind-nextjs-starter-blog/issues/936)
-  - [作者提供的內容說明](https://tailwind-nextjs-starter-blog.vercel.app/blog/new-features-in-v1#table-of-contents-component)
-  - 以下附上我修改的部分：可以看一下 `TOCInline` 元件的使用方式。
-    - 如果和我一樣是固定 nav 的話還需要調整 css 避免 anchor 被 navbar 蓋住
-    - 調整深色模式下的 code block 樣式，因為深色模式程式碼背景和網站背景色一樣。如果要調整可以在 `css/prism.css` 中的 `.code-highlight` 中加入 dark 樣式
+- **首頁樣式：** 調整空間寬高，加了首頁圖片 (想要有點自己的風格，記得要使用 Image Component，不然會出問題)
+- **TechNote：** 如首頁提到的，Navbar 有個 `TechNote` 分類。因為學習習慣和不想把部落格放一堆瑣碎的筆記，預計使用 docusaurus 另外架設程式筆記站
+- **字體樣式：** 作者使用的是英文，原樣式使用於中文標題上字體太粗、文字太緊密，因此調整不使用 extrabold 和 tight
+- **載入留言：** 作者僅放了 `Load Comments` 的按鈕，但樣式太不想可點擊的按鈕，因此調整了該按鈕樣式
+- **側邊目錄：**: 作者在 [這篇 Issue 表示](https://github.com/timlrx/tailwind-nextjs-starter-blog/issues/936) 只做置頂 TOC 是個人偏好。但我還是想將目錄固定在頁面上，因此將原有 TOC 元件調整為 Desktop 版本會顯示側邊固定目錄
+  - 以下附上部分設定：可以看 `TOCInline` 元件的使用方式，更多使用說明可參考依賴套件 [pliny repo](https://github.com/timlrx/pliny) 的說明
+    - 如果固定 nav 的話需要調整 css 避免 anchor 被遮住
+    - 深色模式下的 code block 背景和網站背景色一樣，如果想調整可以在 `css/prism.css` 中的 `.code-highlight` 中加入 dark 樣式
 
-  ```jsx
+  ``` jsx
   <aside className="space-y hidden pt-10 lg:relative lg:col-span-1 lg:block">
     <div className="top-32 mb-4 lg:sticky">
       <h2 className="mb-4 text-xl font-bold">目錄</h2>
@@ -74,8 +79,13 @@ summary: 使用開源模板 (感謝作者 timlrx) 重架部落格，紀錄一下
 
 ## 頭像和首頁圖片
 
-花了非常多時間畫頭像 XD 原本就想給部落格一點像素風，但在 Hexo 時期一直畫不滿意只改了字體。最近買了 Pixel Jeff 的兩堂線上教學課(好瘋)，趁著勢頭趕快畫一下，感謝插畫家朋友的指點，成果非常滿意! 目前還在思考首頁圖片怎麼畫，預計是要一張小動畫，但可能要考慮先處理 TechNote 站台架設，不然現在有點畫上癮，搞不好會花幾周都在畫圖 XD
+花了非常多時間**畫頭像** XD 原本就希望部落格有像素風，但在 hexo 時期只改了字體。最近買了 Pixel Jeff 的兩堂線上像素畫教學課(好瘋)，趁著勢頭畫一下也感謝插畫家朋友的指點，成果非常滿意!  
 
-## ver. 2024-11-25
+目前還在思考 logo 和首頁圖片，預計會有點小動畫感，但可能要先處理 TechNote 站台架設，不然現在有點畫上癮，搞不好會花幾周都在畫圖 XD
 
-目前熟悉的部分僅限上述有提到的內容 (跟某些懶得提及的樣式修改)，還有一些沒加入的功能之後再慢慢補上 (ex. google analytics )。
+## 結語
+
+雖然還是花了一點時間，但研究套件和看別人如何建構 next.js 專案收穫良多。總結就是這真的是個很棒的部落格模板，快用起來吧！如果架設時遇到問題也可以留言或聯絡我，我會盡力幫忙。
+
+**最後，感謝 timlrx 和 Eason Chang 的分享，讓我找到滿意的新家！**
+
