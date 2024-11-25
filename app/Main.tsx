@@ -2,6 +2,7 @@ import Link from '@/components/Link'
 import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
 import { formatDate } from 'pliny/utils/formatDate'
+import Image from '@/components/Image'
 import NewsletterForm from 'pliny/ui/NewsletterForm'
 
 const MAX_DISPLAY = 5
@@ -9,10 +10,9 @@ const MAX_DISPLAY = 5
 export default function Home({ posts }) {
   return (
     <>
-      {/* <div className="mb-8 space-y-8 border-b-[1px] border-solid border-gray-200 py-8 dark:border-gray-700 sm:flex sm:space-x-8 sm:space-y-0"> */}
-      <div className="mb-16 mt-8 space-y-4 sm:flex sm:space-x-6 sm:space-y-0">
+      <div className="mb-16 mt-8 space-y-4 sm:flex sm:space-x-6 sm:space-y-0 ">
         {/* Welcome */}
-        <div className="w-full space-y-2 sm:space-y-5 md:w-1/2">
+        <div className="w-full space-y-2 sm:flex sm:w-2/3 sm:flex-col sm:justify-between sm:space-y-5">
           <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100  md:text-4xl ">
             Hi, this is Shuan,
           </h1>
@@ -26,7 +26,7 @@ export default function Home({ posts }) {
             <p className="text-sm leading-8">
               有些部落格教學文閱讀體驗不太好，決定零碎筆記和長文類整理在像技術文件的框架中 (
               <a
-                href="http://localhost:3001/docs/intro"
+                href="https://shuan-technote.vercel.app/"
                 className=" text-blue-500 underline hover:font-bold"
               >
                 技術筆記
@@ -36,7 +36,14 @@ export default function Home({ posts }) {
           </div>
         </div>{' '}
         {/* Banner Image */}
-        <div className="w-full md:w-1/2">
+        <div className="w-full overflow-hidden rounded sm:w-1/3">
+          <Image
+            src="/static/images/avatar.jpg"
+            alt={'homepage-banner'}
+            width={600}
+            height={600}
+            className="h-full w-full object-cover "
+          />
           {/* <img
             className="h-full w-full object-cover"
             src="https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-800x525.jpg"

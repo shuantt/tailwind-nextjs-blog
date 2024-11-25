@@ -7,7 +7,7 @@ const siteMetadata = {
   language: 'zh-TW',
   theme: 'system', // system, dark or light
   siteUrl: 'https://shuan-blog.vercel.app/',
-  siteRepo: 'https://github.com/shuantt/tailwind-next-blog',
+  siteRepo: 'https://github.com/shuantt/tailwind-nextjs-blog',
   siteLogo: `${process.env.BASE_PATH || ''}/static/images/logo.png`,
   socialBanner: `${process.env.BASE_PATH || ''}/static/images/twitter-card.png`,
   // mastodon: 'https://mastodon.social/@mastodonuser',
@@ -45,9 +45,9 @@ const siteMetadata = {
     // posthogAnalytics: {
     //   posthogProjectApiKey: '', // e.g. 123e4567-e89b-12d3-a456-426614174000
     // },
-    // googleAnalytics: {
-    //   googleAnalyticsId: '', // e.g. G-XXXXXXX
-    // },
+    googleAnalytics: {
+      googleAnalyticsId: 'G-V5KP9LC9B6', // e.g. G-XXXXXXX
+    },
   },
   newsletter: {
     // supports mailchimp, buttondown, convertkit, klaviyo, revue, emailoctopus, beehive

@@ -2,7 +2,7 @@
 title: 部落格搬家 - 使用 next.js + tailwind
 date: '2024-11-25'
 authors: ['default']
-draft: true
+draft: false
 tags: ['react', 'next.js', 'blog']
 summary: 使用開源模板 (感謝作者 timlrx) 重架部落格，紀錄一下過程和遇到的問題，順便推廣一下這麼棒的開源專案。
 ---
@@ -33,45 +33,44 @@ summary: 使用開源模板 (感謝作者 timlrx) 重架部落格，紀錄一下
 其實幾乎是開箱即用，但還是用了兩天熟悉專案結構和依賴套件，尤其是 contentlayer 的使用，以下是花了較多時間的部分：
 
 - 研究 `giscus` 留言系統 (其實也提供原本 hexo 使用的 `utterance`，但我覺得留言放在 discussion 是更好的主意)
-- 無法隱藏 `draft = true` 文章的問題 (這點也影響 tags 顯示)
-- 嘗試使用 filter 來過濾 tags，但發現就算數字顯示變少，點進 tags 還是會出現多篇，因為 contentlayer 會生成所有文章，只有顯示的數字不同
-- 即使將文章檔案從 `/data/blog` 中移除，原本 generated 的內容還是會殘留在 `/.contentlayer` 資料夾中，導致 tags 顯示不正確
-- 因為一直跳出 `contentlayer 可能在 window 上運作不如預期`，還以為上述問題可能是套件有錯誤，努力翻官方文件和 issue，最後發現似乎只是警告
-
-因為有問題的部分都是 contentlayer，試著看官方文件和問 GPT 修改 `.contentlayer.config.ts`，但仍會生成不想要的內容，最後決定手動處理：
-
-- 新增 `data/draft` 資料夾，將草稿貼文移動到這裡避免生成
-- 本地測試時如有貼文調整，手動清除 `.contentlayer/generated` 再重新讓 contentlayer 去 generated json
-
-雖然解法很爛，但也沒那麼麻煩，未來如果找到自動化方法再來更新。
+- ***關於 contentlayer: 結果在 prod 部署後 draft = true 設定才會生效就不會被渲染了 ... 整個白忙一場，其實也有試著將 isProduction 相關設定移除，但可能沒有移除全部，下面這串看看就算了***
+  - 無法隱藏 `draft = true` 文章的問題 (這點也影響 tags 顯示)
+  - 嘗試使用 filter 來過濾 tags，但發現就算數字顯示變少，點進 tags 還是會出現多篇，因為 contentlayer 會生成所有文章，只有顯示的數字不同
+  - 即使將文章檔案從 `/data/blog` 中移除，原本 generated 的內容還是會殘留在 `/.contentlayer` 資料夾中，導致 tags 顯示不正確
+  - 因為一直跳出 `contentlayer 可能在 window 上運作不如預期`，還以為上述問題可能是套件有錯誤，努力翻官方文件和 issue，最後發現似乎只是警告
+  - 因為有問題的部分都是 contentlayer，試著看官方文件和問 GPT 修改 `.contentlayer.config.ts`，但仍會生成不想要的內容，最後決定手動處理：
+    - 新增 `data/draft` 資料夾，將草稿貼文移動到這裡避免生成
+    - 本地測試時如有貼文調整，手動清除 `.contentlayer/generated` 再重新讓 contentlayer 去 generated json
+  - 雖然解法很爛，但也沒那麼麻煩，未來如果找到自動化方法再來更新。
 
 ## 自己調整的部分
 
 - **首頁樣式：** 調整了空間寬高，加了點文字和圖片 (想要有點自己的風格)
 - **TechNote 分類：** 如首頁提到的新增了 `TechNote` 分類，個人還是喜歡有導覽列的技術文件，也不想把部落格放一堆瑣碎的筆記，預計使用 docusaurus 架設
 - **字體樣式：** 因原作者是主要使用英文，標題如果是中文樣式不好看，字體太粗、文字太擠，因此做了點微調，不要使用 extrabold 和 tight
+- **載入留言：** 原本作者只放了一個 `Load Comments` 的字樣，樣式設計的不像按鈕很不直覺，因此我改成更像按鈕的樣式
 - **側邊目錄 (TOC)**: 我的學習習慣是先看大綱再看細節，缺乏 TOC 的文章我覺得不是很好掌握脈絡。原作者表示因為喜好，他只做了置頂 TOC，但我還是喜歡目錄固定在頁面上，因此加入了 Desktop 版本的側邊固定目錄。
   - [針對 TOC 的 Issue](https://github.com/timlrx/tailwind-nextjs-starter-blog/issues/936)
   - [作者提供的內容說明](https://tailwind-nextjs-starter-blog.vercel.app/blog/new-features-in-v1#table-of-contents-component)
-  - 以下附上我修改的部分：可以看一下 `TOCInline` 元件的使用方式。如果和我一樣是固定 nav 的話還需要調整 css 避免 anchor 被 navbar 蓋住。我還調整了一下深色模式的樣式，因為深色模式下 code block 背景和網站背景一樣。如果要調整可以在 `css/prism.css` 中的 `.code-highlight` 中加入 dark 樣式
+  - 以下附上我修改的部分：可以看一下 `TOCInline` 元件的使用方式。
+    - 如果和我一樣是固定 nav 的話還需要調整 css 避免 anchor 被 navbar 蓋住
+    - 調整深色模式下的 code block 樣式，因為深色模式程式碼背景和網站背景色一樣。如果要調整可以在 `css/prism.css` 中的 `.code-highlight` 中加入 dark 樣式
 
-```js
-<aside className="space-y hidden pt-10 lg:relative lg:col-span-1 lg:block">
-  <div className="top-32 mb-4 lg:sticky">
-    <h2 className="mb-4 text-xl font-bold">目錄</h2>
-    <TOCInline
-      ulClassName="px-4 space-y-2 overflow-y-auto"
-      liClassName="list-disc hover:text-primary-500 text-xs"
-      toc={content.toc}
-      exclude="Overview"
-      toHeading={4}
-      fromHeading={2}
-    />
-  </div>
-</aside>
-```
-
-- **留言載入：** 原本作者只放了一個 `Load Comments` 的字樣，樣式設計的不像按鈕很不直覺，因此我改成更像按鈕的樣式
+  ```jsx
+  <aside className="space-y hidden pt-10 lg:relative lg:col-span-1 lg:block">
+    <div className="top-32 mb-4 lg:sticky">
+      <h2 className="mb-4 text-xl font-bold">目錄</h2>
+      <TOCInline
+        ulClassName="px-4 space-y-2 overflow-y-auto"
+        liClassName="list-disc hover:text-primary-500 text-xs"
+        toc={content.toc}
+        exclude="Overview"
+        toHeading={4}
+        fromHeading={2}
+      />
+    </div>
+  </aside>
+  ```
 
 ## 頭像和首頁圖片
 
