@@ -34,11 +34,11 @@ export default function Home({ posts }) {
         </div>{' '}
         {/* Banner Image */}
         <div className="w-full md:w-1/2">
-          <img
+          {/* <img
             className="h-full w-full object-cover"
             src="https://gratisography.com/wp-content/uploads/2024/11/gratisography-augmented-reality-800x525.jpg"
             alt=""
-          />
+          /> */}
         </div>
       </div>
       <div className="mb-8">
