@@ -25,7 +25,10 @@ export default function Home({ posts }) {
             </h3>
             <p className="text-sm leading-8">
               有些部落格教學文閱讀體驗不太好，決定零碎筆記和長文類整理在像技術文件的框架中 (
-              <a href="#" className=" text-blue-500 underline hover:font-bold">
+              <a
+                href="http://localhost:3001/docs/intro"
+                className=" text-blue-500 underline hover:font-bold"
+              >
                 技術筆記
               </a>
               ) ，這裡放觀念或者大綱加總結的內容。( 而且這樣生活廢文多也看起來更自然呢 )

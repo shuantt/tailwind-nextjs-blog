@@ -16,7 +16,7 @@ export default function Comments({ slug }: { slug: string }) {
         <CommentsComponent commentsConfig={siteMetadata.comments} slug={slug} />
       ) : (
         <button
-          className="rounded py-2 px-4 dark:border-gray-100 border-gray-400 border-solid border-[1px] hover:bg-gray-100 dark:hover:bg-gray-700"
+          className="rounded border-[1px] border-solid border-gray-400 px-4 py-2 hover:bg-gray-100 dark:border-gray-100 dark:hover:bg-gray-700"
           onClick={() => setLoadComments(true)}
         >
           展開留言
