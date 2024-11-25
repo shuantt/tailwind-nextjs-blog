@@ -7,11 +7,11 @@ tags: ['react', 'next.js', 'tailwind', 'blog']
 summary: 使用開源模板重架部落格(感謝作者 timlrx) ，紀錄一下過程和遇到的問題，順便推廣一下這個超讚的開源專案！
 ---
 
-## 為什麼一下又搬家？
+## 為什麼一下就搬家了？
 
-尋找 react 學習資源時，意外發現 Eason Chang 大大鐵人賽文章 **[從零開始打造炫砲個人部落格」系列簡介 - Modern Next.js Blog 系列](https://ithelp.ithome.com.tw/articles/10291960)**，美觀和功能都精準命中我的需求，尤其看到使用 tailwind 就迫不及待想搬家，因為 hexo 改起來真的很煩，不論是 ejs 還是 sass 寫法我都不喜歡。原本計畫跟著 30 天文章實作但實在沒時間，且有看到 Eason 是參考另一位大神 timlrx 的 [開源專案](https://github.com/timlrx/tailwind-nextjs-starter-blog)做的，因為專案真的非常完善，最終決定直接搬來用。
+尋找 react 學習資源時，意外發現 Eason Chang 大大鐵人賽文章 **[從零開始打造炫砲個人部落格」系列簡介 - Modern Next.js Blog 系列](https://ithelp.ithome.com.tw/articles/10291960)**，美觀和功能都精準命中我的需求，尤其看到使用 tailwind 就迫不及待想搬家，因為 hexo 改起來真的很煩，不論是 ejs 還是 sass 寫法我都不喜歡。原本計畫跟著 30 天文章實作但實在沒時間，且有看到 Eason 是參考另一位大神 timlrx 的開源專案 [tailwind-nextjs-starter-blog](https://github.com/timlrx/tailwind-nextjs-starter-blog) ，因為專案真的非常完善，且看 Readme 設定也很簡單，最終決定直接搬來用。
 
-## 這個專案包含哪些功能？
+## 專案包含哪些功能？
 
 - 使用 Markdown 生成靜態內容
 - Dark Mode (包含深色/淺色/系統顏色)
@@ -25,17 +25,17 @@ summary: 使用開源模板重架部落格(感謝作者 timlrx) ，紀錄一下�
 - 多種貼文 layout、summary 預覽、複數作者
 - 好看的作品集 (Projects) 和關於我 (About) 頁面
 - 可透過 tailwind config 快速調整主題色系
-- 使用 react + tailwind 比 hexo 更好修改。相反對不使用這兩個技術的人來說是缺點，但寫 ejs 和 sass 使我心累
-- 比 hexo 模板更有現代感！**就真的真的很好看**！(個人喜好XD)
+- 用 react + tailwind 比 hexo 好修改， ejs 和 sass 使我心累 (個人喜好)
+- 比 hexo 模板都更具現代感！**而且就真的真的很好看**！(個人喜好XD)
 
 ## 遇到的問題
 
-幾乎是開箱後代入個人設定後就可使用，但還是花幾天熟悉專案結構和做個人化設定，尤其是卡在調整 `contentlayer` 的部分，具體遇到以下問題：
+幾乎是可以開箱即用，但還是花了幾天熟悉專案結構和做個人化設定，尤其是卡在調整 `contentlayer` 的部分，具體遇到以下問題：
 
 - 本機測試時無法隱藏 `draft = true` 的文章，也影響 tags 計算
 - 移除文章後 `.contentlayer/generated` 的 json 檔案仍會殘留，導致頁面顯示不正確
 - 一直跳出 `contentlayer 可能在 window 上運作不如預期`，還以為是 win 環境有錯誤，搞半天發現似乎只是警告
-- 花式修改失敗後決定手動解決，將草稿文章移動到外層資料夾。
+- 花式修改失敗後決定手動解決，草稿移動到外層資料夾並手動刪除殘留檔案
 
 **沒想到 ... 部署到正式站後 `draft = true` 就生效了，整個白忙一場。** 我其實是有看到環境相關的語法，也有測試將 isProduction 相關設定移除，但可能還是漏掉某些地方導致本地測試不正確。
 
@@ -43,7 +43,7 @@ summary: 使用開源模板重架部落格(感謝作者 timlrx) ，紀錄一下�
 
 ## 簡單的基本設定
 
-其實可以專案 clone 下來後就直接部署，但我還是有做一些基本設定：
+其實專案 clone 下來後就直接測試部署，但其實設定也不多：
 
 - 調整 siteMetadata 
 - 選擇 comment 套件，附上我使用的 [giscus](https://github.com/giscus/giscus)
@@ -55,8 +55,8 @@ summary: 使用開源模板重架部落格(感謝作者 timlrx) ，紀錄一下�
 - **首頁樣式：** 調整空間寬高，加了首頁圖片 (想要有點自己的風格，記得要使用 Image Component，不然會出問題)
 - **TechNote：** 如首頁提到的，Navbar 有個 `TechNote` 分類。因為學習習慣和不想把部落格放一堆瑣碎的筆記，預計使用 docusaurus 另外架設程式筆記站
 - **字體樣式：** 作者使用的是英文，原樣式使用於中文標題上字體太粗、文字太緊密，因此調整不使用 extrabold 和 tight
-- **載入留言：** 作者僅放了 `Load Comments` 的按鈕，但樣式太不想可點擊的按鈕，因此調整了該按鈕樣式
-- **側邊目錄：**: 作者在 [這篇 Issue 表示](https://github.com/timlrx/tailwind-nextjs-starter-blog/issues/936) 只做置頂 TOC 是個人偏好。但我還是想將目錄固定在頁面上，因此將原有 TOC 元件調整為 Desktop 版本會顯示側邊固定目錄
+- **載入留言：** 作者僅放了 `Load Comments` 的按鈕，但樣式太不像可點擊按鈕，因此調整了按鈕樣式
+- **側邊目錄：** 作者在 [這篇 Issue 表示](https://github.com/timlrx/tailwind-nextjs-starter-blog/issues/936) 只做置頂 TOC 是個人偏好。但我還是想將目錄固定在頁面上，因此將原有 TOC 元件調整為 Desktop 版本會顯示側邊固定目錄
   - 以下附上部分設定：可以看 `TOCInline` 元件的使用方式，更多使用說明可參考依賴套件 [pliny repo](https://github.com/timlrx/pliny) 的說明
     - 如果固定 nav 的話需要調整 css 避免 anchor 被遮住
     - 深色模式下的 code block 背景和網站背景色一樣，如果想調整可以在 `css/prism.css` 中的 `.code-highlight` 中加入 dark 樣式
@@ -85,7 +85,7 @@ summary: 使用開源模板重架部落格(感謝作者 timlrx) ，紀錄一下�
 
 ## 結語
 
-雖然還是花了一點時間，但研究套件和看別人如何建構 next.js 專案收穫良多。總結就是這真的是個很棒的部落格模板，快用起來吧！如果架設時遇到問題也可以留言或聯絡我，我會盡力幫忙。
+雖然花了不少時間，但研究套件和看別人如何建構 next.js 專案收穫良多。總結就是這真的是個很棒的部落格模板，快用起來吧！如果架設時遇到問題也可以留言或聯絡我，我會盡力幫忙。
 
 **最後，感謝 timlrx 和 Eason Chang 的分享，讓我找到滿意的新家！**
 
