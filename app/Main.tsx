@@ -24,14 +24,16 @@ export default function Home({ posts }) {
               關於「Posts」和「Technotes」分類
             </h3>
             <p className="text-sm leading-8">
-              個人認為閱讀「帶側邊欄的技術文件式網站」會比傳統部落格教學好掌握學習脈絡，因此另開一個站存放零碎筆記和系列內容， (
+              個人認為閱讀「帶側邊欄的技術文件式網站」會比傳統部落格教學好掌握學習脈絡，因此另開一個站存放零碎筆記和系列內容，
+              (
               <a
                 href="https://shuan-technote.vercel.app/"
                 className=" text-blue-500 underline hover:font-bold"
               >
                 Technotes
               </a>
-              ) ，部落格這邊會更偏向寫觀念類，或透過整理大綱並加入總結的方式呈現。( 而且這樣生活廢文多也看起來更自然呢 )
+              ) ，部落格這邊會更偏向寫觀念類，或透過整理大綱並加入總結的方式呈現。(
+              而且這樣生活廢文多也看起來更自然呢 )
             </p>
           </div>
         </div>{' '}
