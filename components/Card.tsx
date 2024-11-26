@@ -6,11 +6,21 @@ const Card = ({ title, description, frontend, backend, demoUrl, apiUrl, imgSrc, 
     <div
       className={`${
         imgSrc && 'h-full'
-      }  overflow-hidden rounded-md border-2 border-gray-200 border-opacity-60 dark:border-gray-700`}
+      }  overflow-hidden rounded-md border-2 border-gray-200 border-opacity-60  dark:border-gray-700 `}
     >
-      {imgSrc &&
-        (href ? (
-          <Link href={href} aria-label={`Link to ${title}`}>
+      <div className="border-b-[1px] border-solid border-gray-200 ">
+        {imgSrc &&
+          (href ? (
+            <Link href={href} aria-label={`Link to ${title}`}>
+              <Image
+                alt={title}
+                src={imgSrc}
+                className="h-64 object-cover object-top md:h-48 xl:h-64"
+                width={544}
+                height={256}
+              />
+            </Link>
+          ) : (
             <Image
               alt={title}
               src={imgSrc}
@@ -18,16 +28,8 @@ const Card = ({ title, description, frontend, backend, demoUrl, apiUrl, imgSrc, 
               width={544}
               height={256}
             />
-          </Link>
-        ) : (
-          <Image
-            alt={title}
-            src={imgSrc}
-            className="h-64 object-cover object-top md:h-48 xl:h-64"
-            width={544}
-            height={256}
-          />
-        ))}
+          ))}
+      </div>
       <div className="space-y-2 p-6">
         <h2 className="mb-3 text-2xl font-bold leading-8 tracking-tight">
           {href ? (
