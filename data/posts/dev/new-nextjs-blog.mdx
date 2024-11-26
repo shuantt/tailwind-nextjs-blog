@@ -9,7 +9,7 @@ summary: 使用開源模板重架部落格(感謝作者 timlrx) ，紀錄一下�
 
 ## 為什麼一下就搬家了？
 
-尋找 react 學習資源時，意外發現 Eason Chang 大大鐵人賽文章 **[從零開始打造炫砲個人部落格」系列簡介 - Modern Next.js Blog 系列](https://ithelp.ithome.com.tw/articles/10291960)**，美觀和功能都精準命中我的需求，尤其看到使用 tailwind 就迫不及待想搬家，因為 hexo 改起來真的很煩，不論是 ejs 還是 sass 寫法我都不喜歡。原本計畫跟著 30 天文章實作但實在沒時間，且有看到 Eason 是參考另一位大神 timlrx 的開源專案 [tailwind-nextjs-starter-blog](https://github.com/timlrx/tailwind-nextjs-starter-blog) ，因為專案真的非常完善，且看 Readme 設定也很簡單，最終決定直接搬來用。
+尋找 react 學習資源時，意外發現 Eason Chang 大大鐵人賽文章 **[從零開始打造炫砲個人部落格」系列簡介 - Modern Next.js Blog 系列](https://ithelp.ithome.com.tw/articles/10291960)**，美觀和功能都精準命中我的需求，尤其看到使用 tailwind 就迫不及待想搬家，因為 hexo 改起來不太順，不論是 ejs 還是 sass 寫法我都不喜歡。原本計畫跟著 30 天文章實作但實在沒時間，有看到 Eason 是參考另一位大神 timlrx 的開源專案 [tailwind-nextjs-starter-blog](https://github.com/timlrx/tailwind-nextjs-starter-blog) ，由於專案真的非常完善，且看起來設定也很簡單，最終決定直接搬來用。
 
 ## 專案包含哪些功能？
 
@@ -30,7 +30,7 @@ summary: 使用開源模板重架部落格(感謝作者 timlrx) ，紀錄一下�
 
 ## 遇到的問題
 
-幾乎是可以開箱即用，但還是花了幾天熟悉專案結構和做個人化設定，尤其是卡在調整 `contentlayer` 的部分，具體遇到以下問題：
+幾乎開箱即用，但還是花了幾天熟悉專案結構和做個人化設定，尤其是卡在調整 `contentlayer` 的部分，具體遇到以下問題：
 
 - 本機測試時無法隱藏 `draft = true` 的文章，也影響 tags 計算
 - 移除文章後 `.contentlayer/generated` 的 json 檔案仍會殘留，導致頁面顯示不正確
@@ -39,21 +39,23 @@ summary: 使用開源模板重架部落格(感謝作者 timlrx) ，紀錄一下�
 
 **沒想到 ... 部署到正式站後 `draft = true` 就生效了，整個白忙一場。** 我其實是有看到環境相關的語法，也有測試將 isProduction 相關設定移除，但可能還是漏掉某些地方導致本地測試不正確。
 
-**結論：專案很完整不要懷疑大神寫錯，部署就對了！(哭)**
+**結論：專案很完整不要懷疑大神寫錯，部署就對了！(跪)**
 
 ## 簡單的基本設定
 
-其實可以專案 clone 下來後就直接測試部署，但其實設定也不多：
+其實專案 clone 下來後就可以做部署測試，後續需要設定的內容也不多：
 
 - 調整 siteMetadata 
 - 選擇 comment 套件，附上我使用的 [giscus](https://github.com/giscus/giscus)
 - env 根據留言系統加入環境變數資料
-- google analytics 除了 siteMetadata 設定外，還可能需要修改 `next.config.js` 中將網域加入白名單
+- google analytics 除了 siteMetadata 設定外，還可能需要修改 `next.config.js` 將網域加入白名單
 
 ## 自己調整的部分
 
-- **首頁樣式：** 調整空間寬高，加了首頁圖片 (想要有點自己的風格，記得要使用 Image Component，不然會出問題)
-- **TechNote：** 如首頁提到的，Navbar 有個 `TechNote` 分類。因為學習習慣和不想把部落格放一堆瑣碎的筆記，預計使用 docusaurus 另外架設程式筆記站
+- **首頁樣式：** 調整空間寬高，加了首頁圖片，想要有點自己的風格 (記得要使用 Image Component，不然會出問題)
+- **Projects：** 調整了 Project 頁的卡牌樣式，新增更多專案資訊 
+- **Tags**：移除標籤雲，因為 Posts 頁面有同樣功能，未來考慮增加分類項目
+- **TechNote：** 如首頁提到的，Navbar 有個 `TechNote` 分類。因為學習習慣和不想把部落格放一堆瑣碎的筆記，使用 `docusaurus` 另外架設程式筆記站
 - **字體樣式：** 作者使用的是英文，原樣式使用於中文標題上字體太粗、文字太緊密，因此調整不使用 extrabold 和 tight
 - **載入留言：** 作者僅放了 `Load Comments` 的按鈕，但樣式太不像可點擊按鈕，因此調整了按鈕樣式
 - **側邊目錄：** 作者在 [這篇 Issue 表示](https://github.com/timlrx/tailwind-nextjs-starter-blog/issues/936) 只做置頂 TOC 是個人偏好。但我還是想將目錄固定在頁面上，因此將原有 TOC 元件調整為 Desktop 版本會顯示側邊固定目錄
@@ -79,13 +81,13 @@ summary: 使用開源模板重架部落格(感謝作者 timlrx) ，紀錄一下�
 
 ## 頭像和首頁圖片
 
-花了非常多時間**畫頭像** XD 原本就希望部落格有像素風，但在 hexo 時期只改了字體。最近買了 Pixel Jeff 的兩堂線上像素畫教學課(好瘋)，趁著勢頭畫一下也感謝插畫家朋友的指點，成果非常滿意!  
+花超多時間**畫頭像** XD 原本就希望部落格有像素風，但在 hexo 時期只改了字體。最近買了 Pixel Jeff 的兩堂線上像素畫教學課(好瘋)，趁著勢頭畫一下也感謝插畫家朋友的指點，成果非常滿意!  
 
 目前還在思考 logo 和首頁圖片，預計會有點小動畫感，但可能要先處理 TechNote 站台架設，不然現在有點畫上癮，搞不好會花幾周都在畫圖 XD
 
 ## 結語
 
-雖然花了不少時間，但研究套件和看別人如何建構 next.js 專案收穫良多。總結就是這真的是個很棒的部落格模板，快用起來吧！如果架設時遇到問題也可以留言或聯絡我，我會盡力幫忙。
+雖然搞了好幾天，但研究套件和看別人如何建構 next.js 專案收穫良多也很有趣。總結就是這真的是個很棒的部落格模板，快用起來吧！如果架設時遇到問題也可以留言或聯絡我，我會盡力幫忙。
 
 **最後，感謝 timlrx 和 Eason Chang 的分享，讓我找到滿意的新家！**
 
