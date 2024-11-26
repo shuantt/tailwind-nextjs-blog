@@ -1,7 +1,7 @@
 import Image from './Image'
 import Link from './Link'
 
-const Card = ({ title, description, imgSrc, href }) => (
+const Card = ({ title, description, frontend, backend, demoUrl, apiUrl, imgSrc, href }) => (
   <div className="md max-w-[544px] p-4 md:w-1/2">
     <div
       className={`${
@@ -14,21 +14,21 @@ const Card = ({ title, description, imgSrc, href }) => (
             <Image
               alt={title}
               src={imgSrc}
-              className="object-cover object-center md:h-36 lg:h-48"
+              className="h-64 object-cover object-top md:h-48 xl:h-64"
               width={544}
-              height={306}
+              height={256}
             />
           </Link>
         ) : (
           <Image
             alt={title}
             src={imgSrc}
-            className="object-cover object-center md:h-36 lg:h-48"
+            className="h-64 object-cover object-top md:h-48 xl:h-64"
             width={544}
-            height={306}
+            height={256}
           />
         ))}
-      <div className="p-6">
+      <div className="space-y-2 p-6">
         <h2 className="mb-3 text-2xl font-bold leading-8 tracking-tight">
           {href ? (
             <Link href={href} aria-label={`Link to ${title}`}>
@@ -38,7 +38,41 @@ const Card = ({ title, description, imgSrc, href }) => (
             title
           )}
         </h2>
-        <p className="prose mb-3 max-w-none text-gray-500 dark:text-gray-400">{description}</p>
+        <p className="prose max-w-none text-sm text-gray-500  dark:text-gray-400 md:text-base ">
+          {description}{' '}
+        </p>
+        <div className="flex space-x-2">
+          {demoUrl && (
+            <div>
+              <Link
+                href={demoUrl}
+                className="text-sm font-medium text-blue-500 underline dark:text-blue-200"
+                aria-label={`Link to ${title}`}
+              >
+                Demo
+              </Link>
+            </div>
+          )}
+          {apiUrl && (
+            <div>
+              <Link
+                href={apiUrl}
+                className="text-sm font-medium text-blue-500 underline dark:text-blue-200 sm:text-xs"
+                aria-label={`Link to ${title} API`}
+              >
+                API
+              </Link>
+            </div>
+          )}
+        </div>
+        <div className="space-y-1">
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            <span className="text-bold">前端:</span> {frontend}
+          </p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            <span className="text-bold">後端:</span> {backend}
+          </p>
+        </div>
         {href && (
           <Link
             href={href}

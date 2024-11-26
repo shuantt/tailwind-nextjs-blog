@@ -24,6 +24,10 @@ export default function Projects() {
                 title={d.title}
                 description={d.description}
                 imgSrc={d.imgSrc}
+                frontend={d.frontend}
+                backend={d.backend}
+                demoUrl={d.demoUrl}
+                apiUrl={d.apiUrl}
                 href={d.href}
               />
             ))}

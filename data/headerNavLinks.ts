@@ -1,9 +1,9 @@
 const headerNavLinks = [
   { href: '/', title: 'Home' },
-  { href: '/blog', title: 'Posts' },
+  { href: '/posts', title: 'Posts' },
   // { href: '/tags', title: 'Tags' },
-  { href: 'https://shuan-technote.vercel.app/', title: 'TechNote' },
   { href: '/projects', title: 'Projects' },
+  { href: 'https://shuan-technote.vercel.app/', title: 'TechNote' },
   { href: '/about', title: 'About' },
 ]
 
