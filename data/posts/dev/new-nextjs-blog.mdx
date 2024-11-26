@@ -9,32 +9,34 @@ summary: 使用開源模板重架部落格(感謝作者 timlrx) ，紀錄一下�
 
 ## 為什麼一下就搬家了？
 
-尋找 react 學習資源時，意外發現 Eason Chang 大大鐵人賽文章 **[從零開始打造炫砲個人部落格」系列簡介 - Modern Next.js Blog 系列](https://ithelp.ithome.com.tw/articles/10291960)**，美觀和功能都精準命中我的需求，尤其看到使用 tailwind 就迫不及待想搬家，因為 hexo 改起來不太順，不論是 ejs 還是 sass 寫法我都不喜歡。原本計畫跟著 30 天文章實作但實在沒時間，有看到 Eason 是參考另一位大神 timlrx 的開源專案 [tailwind-nextjs-starter-blog](https://github.com/timlrx/tailwind-nextjs-starter-blog) ，由於專案真的非常完善，且看起來設定也很簡單，最終決定直接搬來用。
+尋找 React 學習資源時，意外發現 Eason Chang 大大鐵人賽文章 **[「從零開始打造炫砲個人部落格」系列簡介 - Modern Next.js Blog 系列](https://ithelp.ithome.com.tw/articles/10291960)**，美觀和功能都精準命中我的需求，尤其看到使用 tailwind 就迫不及待想搬家，因為 Hexo 改起來不太順，不論是 EJS 還是 SASS 寫法我都不喜歡。原本計畫跟著 30 天文章實作但實在沒時間，看到 Eason 是參考另一位大神 timlrx 的開源專案 [tailwind-nextjs-starter-blog](https://github.com/timlrx/tailwind-nextjs-starter-blog) ，由於此專案非常完善且容易設定，最終決定直接搬來用。
 
 ## 專案包含哪些功能？
 
-- 使用 Markdown 生成靜態內容
-- Dark Mode (包含深色/淺色/系統顏色)
-- tags 分類、prev & next 前後貼文切換
-- 留言系統 (支援 giscus、utterances、disqus)
-- 全文搜尋 kbar ( ctrl + k ) 
+- Markdown 生成貼文，支援 MDX
+- Dark Mode (system/light/dark)
+- Tags 標籤雲
+- Prev & Next
+- Comment System (support giscus、utterances、disqus)
+- Search kbar ( ctrl + k ) 
 - Markdown TOC (Table Of Content, 但只提供置頂版)
-- 容易設定的巢狀路由 (不像 hexo 使用日期)
-- 提供 SEO、Newsletter、RSS、Google Analytics 等功能可選擇性開啟
-- 可調整 Code block 樣式 (prisma.css)
-- 多種貼文 layout、summary 預覽、複數作者
-- 好看的作品集 (Projects) 和關於我 (About) 頁面
-- 可透過 tailwind config 快速調整主題色系
-- 用 react + tailwind 比 hexo 好修改， ejs 和 sass 使我心累 (個人喜好)
-- 比 hexo 模板都更具現代感！**而且就真的真的很好看**！(個人喜好XD)
+- 容易設定的巢狀路由 
+- 附加功能還有 Newsletter、RSS、Multiple Analytics (ex. Google Analytics) 等等
+- SEO friendly、Lighthouse performance 90+
+- 易調整 code block 樣式 (prisma.css)
+- 3 種貼文布局、文章預覽、可使用複數作者(可作為團隊 Blog)
+- 好看的作品集和關於我頁面 (Projects、About)
+- 可透過 Tailwind config 快速調整色系
+- 用 React + Tailwind 比 Hexo 好修改，EJS 和 SASS 使我心累 (個人喜好)
+- 比現有 Hexo 模板都更具現代感，**而且就真的真的很好看**！(個人喜好)
 
 ## 遇到的問題
 
 幾乎開箱即用，但還是花了幾天熟悉專案結構和做個人化設定，尤其是卡在調整 `contentlayer` 的部分，具體遇到以下問題：
 
 - 本機測試時無法隱藏 `draft = true` 的文章，也影響 tags 計算
-- 移除文章後 `.contentlayer/generated` 的 json 檔案仍會殘留，導致頁面顯示不正確
-- 一直跳出 `contentlayer 可能在 window 上運作不如預期`，還以為是 win 環境有錯誤，搞半天發現似乎只是警告
+- 移除文章後 `.contentlayer/generated` 的 JSON 檔案仍會殘留，導致頁面顯示不正確
+- 一直跳出 `contentlayer 可能在 window 上運作不如預期`，還以為是 Window 環境有錯誤，搞半天發現似乎只是警告
 - 花式修改失敗後決定手動解決，草稿移動到外層資料夾並手動刪除殘留檔案
 
 **沒想到 ... 部署到正式站後 `draft = true` 就生效了，整個白忙一場。** 我其實是有看到環境相關的語法，也有測試將 isProduction 相關設定移除，但可能還是漏掉某些地方導致本地測試不正確。
@@ -45,23 +47,23 @@ summary: 使用開源模板重架部落格(感謝作者 timlrx) ，紀錄一下�
 
 其實專案 clone 下來後就可以做部署測試，後續需要設定的內容也不多：
 
-- 調整 siteMetadata 
-- 選擇 comment 套件，附上我使用的 [giscus](https://github.com/giscus/giscus)
-- env 根據留言系統加入環境變數資料
-- google analytics 除了 siteMetadata 設定外，還可能需要修改 `next.config.js` 將網域加入白名單
+- 調整 `siteMetadata`
+- 選擇留言系統套件，附上我使用的 [giscus](https://github.com/giscus/giscus)
+- 根據留言系統加入環境變數資料，查看 `example.env`
+- Google Analytics 還需要修改 `next.config.js` 將網域加入白名單
 
 ## 自己調整的部分
 
-- **首頁樣式：** 調整空間寬高，加了首頁圖片，想要有點自己的風格 (記得要使用 Image Component，不然會出問題)
+- **首頁樣式：** 調整空間寬高並加了首頁圖片，想要有點自己的風格 (記得要使用 Image 元件，不然會有警告)
 - **Projects：** 調整了 Project 頁的卡牌樣式，新增更多專案資訊 
 - **Tags**：移除標籤雲，因為 Posts 頁面有同樣功能，未來考慮增加分類項目
-- **TechNote：** 如首頁提到的，Navbar 有個 `TechNote` 分類。因為學習習慣和不想把部落格放一堆瑣碎的筆記，使用 `docusaurus` 另外架設程式筆記站
-- **字體樣式：** 作者使用的是英文，原樣式使用於中文標題上字體太粗、文字太緊密，因此調整不使用 extrabold 和 tight
-- **載入留言：** 作者僅放了 `Load Comments` 的按鈕，但樣式太不像可點擊按鈕，因此調整了按鈕樣式
-- **側邊目錄：** 作者在 [這篇 Issue 表示](https://github.com/timlrx/tailwind-nextjs-starter-blog/issues/936) 只做置頂 TOC 是個人偏好。但我還是想將目錄固定在頁面上，因此將原有 TOC 元件調整為 Desktop 版本會顯示側邊固定目錄
-  - 以下附上部分設定：可以看 `TOCInline` 元件的使用方式，更多使用說明可參考依賴套件 [pliny repo](https://github.com/timlrx/pliny) 的說明
-    - 如果固定 nav 的話需要調整 css 避免 anchor 被遮住
-    - 深色模式下的 code block 背景和網站背景色一樣，如果想調整可以在 `css/prism.css` 中的 `.code-highlight` 中加入 dark 樣式
+- **TechNote：** 如首頁提到的，導覽列上的 `Technotes` 會連到外部連結，使用 `docusaurus` 另外架設程式筆記站
+- **字體樣式：** 作者使用的是英文，原樣式用於中文標題上字體太粗、文字太緊密，調整不使用 extrabold 和 tight
+- **載入留言：** 作者僅放了 `Load Comments` 的按鈕，但樣式太不像可互動按鈕，因此調整了按鈕樣式
+- **側邊目錄：** 作者在 [這篇 Issue 表示](https://github.com/timlrx/tailwind-nextjs-starter-blog/issues/936) 只做置頂 TOC 是個人偏好。但我偏好將目錄固定在頁面上，因此將原有 TOC 元件調整為 Desktop 版本會顯示側邊固定目錄
+  - 附上 TOC 部分設定：可以看 `TOCInline` 元件的使用方式，更多說明可參考依賴套件庫 [pliny ](https://github.com/timlrx/pliny) 的說明
+    - 如果固定 Navbar 的話需要調整 css 避免 anchor 文字被遮住
+    - 深色模式下 code block 背景和網站背景色一樣，想調整可以在 `css/prism.css` 中的 `.code-highlight` 中加入 dark 樣式
 
   ``` jsx
   <aside className="space-y hidden pt-10 lg:relative lg:col-span-1 lg:block">
@@ -81,13 +83,13 @@ summary: 使用開源模板重架部落格(感謝作者 timlrx) ，紀錄一下�
 
 ## 頭像和首頁圖片
 
-花超多時間**畫頭像** XD 原本就希望部落格有像素風，但在 hexo 時期只改了字體。最近買了 Pixel Jeff 的兩堂線上像素畫教學課(好瘋)，趁著勢頭畫一下也感謝插畫家朋友的指點，成果非常滿意!  
+花超多時間**畫頭像** XD 原本就希望部落格有像素風，但在 Hexo 時期只改了字體。最近買了 Pixel Jeff 的兩堂線上像素畫教學課(好瘋)，趁著勢頭畫一下也感謝插畫家朋友的指點，成果非常滿意!  
 
 目前還在思考 logo 和首頁圖片，預計會有點小動畫感，但可能要先處理 TechNote 站台架設，不然現在有點畫上癮，搞不好會花幾周都在畫圖 XD
 
 ## 結語
 
-雖然搞了好幾天，但研究套件和看別人如何建構 next.js 專案收穫良多也很有趣。總結就是這真的是個很棒的部落格模板，快用起來吧！如果架設時遇到問題也可以留言或聯絡我，我會盡力幫忙。
+雖然搞了好幾天，但研究套件和看別人如何建構 Next.js 專案收穫良多也很有趣。總結就是這真的是個很棒的部落格模板，快用起來吧！如果架設時遇到問題也可以留言或聯絡我，我會盡力幫忙。
 
 **最後，感謝 timlrx 和 Eason Chang 的分享，讓我找到滿意的新家！**
 

@@ -5,7 +5,7 @@ import { formatDate } from 'pliny/utils/formatDate'
 import Image from '@/components/Image'
 import NewsletterForm from 'pliny/ui/NewsletterForm'
 
-const MAX_DISPLAY = 5
+const MAX_DISPLAY = 8
 
 export default function Home({ posts }) {
   return (
@@ -16,22 +16,22 @@ export default function Home({ posts }) {
           <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100  md:text-4xl ">
             Hi, this is Shuan,
           </h1>
-          <p className="text-sm leading-8 md:text-base md:leading-10">
-            設計師轉工程師，除了技術類的內容，可能還會寫寫生涯、藝術相關、閱讀心得等雜文，如有任何錯誤之處還請多多指點，我會非常感激。
+          <p className="leading-8 md:text-base md:leading-10">
+            設計師轉工程師，除了寫技術文，可能還會寫寫生涯規劃、藝術設計、閱讀心得等雜文，如有任何錯誤之處還請多多指點，我會非常感激。
           </p>
           <div className="space-y-2 rounded-xl bg-gray-100 p-6 dark:bg-gray-700">
             <h3 className="text-base font-bold tracking-tight text-gray-900 dark:text-gray-100 ">
-              關於「貼文」和「技術筆記」分類
+              關於「Posts」和「Technotes」分類
             </h3>
             <p className="text-sm leading-8">
-              有些部落格教學文閱讀體驗不太好，決定零碎筆記和長文類整理在像技術文件的框架中 (
+              個人認為閱讀「帶側邊欄的技術文件式網站」會比傳統部落格教學好掌握學習脈絡，因此另開一個站存放零碎筆記和系列內容， (
               <a
                 href="https://shuan-technote.vercel.app/"
                 className=" text-blue-500 underline hover:font-bold"
               >
-                技術筆記
+                Technotes
               </a>
-              ) ，這裡放觀念或者大綱加總結的內容。( 而且這樣生活廢文多也看起來更自然呢 )
+              ) ，部落格這邊會更偏向寫觀念類，或透過整理大綱並加入總結的方式呈現。( 而且這樣生活廢文多也看起來更自然呢 )
             </p>
           </div>
         </div>{' '}

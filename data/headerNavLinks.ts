@@ -4,7 +4,7 @@ const headerNavLinks = [
   { href: '/projects', title: 'Projects' },
   { href: '/about', title: 'About' },
   // { href: '/tags', title: 'Tags' },
-  { href: 'https://shuan-technote.vercel.app/', title: 'NoteSite' },
+  { href: 'https://shuan-technote.vercel.app/', title: 'Technotes' },
 ]
 
 export default headerNavLinks
