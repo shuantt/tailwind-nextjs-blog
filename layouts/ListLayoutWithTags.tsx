@@ -71,7 +71,24 @@ export default function ListLayoutWithTags({
   const pathname = usePathname()
   const tagCounts = tagData as Record<string, number>
   const tagKeys = Object.keys(tagCounts)
-  const sortedTags = tagKeys.sort((a, b) => tagCounts[b] - tagCounts[a])
+  // const sortedTags = tagKeys.sort((a, b) => tagCounts[b] - tagCounts[a])
+  const sortedTags = tagKeys.sort((a, b) => {
+    const isNumber = (str) => /^[0-9]/.test(str)
+    const isEnglish = (str) => /^[A-Za-z]/.test(str)
+    const isChinese = (str) => /^[\u4e00-\u9fa5]/.test(str)
+
+    if (isNumber(a) && !isNumber(b)) return -1
+    if (!isNumber(a) && isNumber(b)) return 1
+
+    if (isEnglish(a) && !isEnglish(b)) return -1
+    if (!isEnglish(a) && isEnglish(b)) return 1
+
+    if (isChinese(a) && !isChinese(b)) return -1
+    if (!isChinese(a) && isChinese(b)) return 1
+
+    // 如果是同类型，使用 localeCompare 进行排序
+    return a.localeCompare(b, 'zh')
+  })
 
   const displayPosts = initialDisplayPosts.length > 0 ? initialDisplayPosts : posts
 

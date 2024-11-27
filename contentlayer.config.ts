@@ -78,14 +78,27 @@ function createTagCount(allBlogs) {
   writeFileSync('./app/tag-data.json', JSON.stringify(tagCount))
 }
 
+// function createSearchIndex(allBlogs) {
+//   if (
+//     siteMetadata?.search?.provider === 'kbar' &&
+//     siteMetadata.search.kbarConfig.searchDocumentsPath
+//   ) {
+//     writeFileSync(
+//       `public/${path.basename(siteMetadata.search.kbarConfig.searchDocumentsPath)}`,
+//       JSON.stringify(allCoreContent(sortPosts(allBlogs)))
+//     )
+//     console.log('Local search index generated...')
+//   }
+// }
+
 function createSearchIndex(allBlogs) {
   if (
     siteMetadata?.search?.provider === 'kbar' &&
     siteMetadata.search.kbarConfig.searchDocumentsPath
   ) {
     writeFileSync(
-      `public/${path.basename(siteMetadata.search.kbarConfig.searchDocumentsPath)}`,
-      JSON.stringify(allCoreContent(sortPosts(allBlogs)))
+      `public/${siteMetadata.search.kbarConfig.searchDocumentsPath}`,
+      JSON.stringify(sortPosts(allBlogs))
     )
     console.log('Local search index generated...')
   }

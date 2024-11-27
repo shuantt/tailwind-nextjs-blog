@@ -8,7 +8,7 @@ const Card = ({ title, description, frontend, backend, demoUrl, apiUrl, imgSrc, 
         imgSrc && 'h-full'
       }  overflow-hidden rounded-md border-2 border-gray-200 border-opacity-60  dark:border-gray-700 `}
     >
-      <div className="border-b-[1px] border-solid border-gray-200 ">
+      <div className="border-b-2 border-solid border-gray-200 dark:border-gray-700 ">
         {imgSrc &&
           (href ? (
             <Link href={href} aria-label={`Link to ${title}`}>
@@ -59,7 +59,7 @@ const Card = ({ title, description, frontend, backend, demoUrl, apiUrl, imgSrc, 
             <div>
               <Link
                 href={apiUrl}
-                className="text-sm font-medium text-blue-500 underline dark:text-blue-200 sm:text-xs"
+                className="text-sm font-medium text-blue-500 underline dark:text-blue-200"
                 aria-label={`Link to ${title} API`}
               >
                 API

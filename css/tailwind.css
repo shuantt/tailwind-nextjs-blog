@@ -65,7 +65,8 @@ input:-webkit-autofill:focus {
 }
 
 ::-webkit-scrollbar {
-  width: 7px;
+  width: .5rem;
+  height: .5rem; /* 避免水平捲軸受影響 */
 }
 
 ::-webkit-scrollbar-button {
@@ -80,9 +81,7 @@ input:-webkit-autofill:focus {
 
 ::-webkit-scrollbar-thumb {
   border-radius: 4px;
-
   background-color: rgba(0, 0, 0, 0.4);
-
   border: 1px solid slategrey;
 }
 
