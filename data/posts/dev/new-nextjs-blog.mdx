@@ -23,7 +23,7 @@ summary: 使用開源模板重架部落格(感謝作者 timlrx) ，紀錄一下�
 - Newsletter, RSS, Analytics ( ex. GA) ... etc.
 - SEO friendly、Lighthouse performance 90+
 - 易設定的巢狀路由 
-- 易調整 code block 樣式 ( prisma.css )
+- 易調整 code block 樣式 ( prism.css )
 - 3 種貼文布局、文章預覽、可使用複數作者 ( 可作為團隊 Blog )
 - 好看的作品集和關於我頁面 (Projects、About)
 - 可透過 Tailwind config 快速調整色系
@@ -61,10 +61,10 @@ summary: 使用開源模板重架部落格(感謝作者 timlrx) ，紀錄一下�
 - **字體樣式：** 作者使用的是英文，原樣式用於中文標題上字體太粗、文字太緊密，調整不使用 extrabold 和 tight
 - **載入留言：** 作者僅放了 `Load Comments` 的按鈕，但樣式太不像可互動按鈕，因此調整了按鈕樣式
 - **kbar：** 將搜尋調整成全文索引。原本預設只會搜尋 `title` 和 `summary`，頭痛了一下才發現作者有提供修改方式，參考 `/data/faq/customize-kbar-search.md`
+- **code block：** 深色模式背景和網站背景色太近，調整了 `/css/prism.css`；並且加入行號設定，行號設定需調整 `contentlayer.config.ts` 中的 `rehypePrismPlus`，可參考套件庫 [rehype-prism-plus](https://github.com/timlrx/rehype-prism-plus?tab=readme-ov-file) 說明
 - **側邊目錄：** 作者在 [這篇 Issue 表示](https://github.com/timlrx/tailwind-nextjs-starter-blog/issues/936) 只做置頂 TOC 是個人偏好。但我偏好將目錄固定在頁面上，因此將原有 TOC 元件調整為 Desktop 版本會顯示側邊固定目錄
-  - 附上 TOC 部分設定：可以看 `TOCInline` 元件的使用方式，更多說明可參考依賴套件庫 [pliny ](https://github.com/timlrx/pliny) 的說明
-    - 如果固定 Navbar 的話需要調整 css 避免 anchor 文字被遮住
-    - 深色模式下 code block 背景和網站背景色一樣，想調整可以在 `/css/prism.css` 中的 `.code-highlight` 中加入 dark 樣式
+  - 附上 TOC 部分設定：可以看 `TOCInline` 元件的使用方式，更多說明請參考依賴套件庫 [pliny](https://github.com/timlrx/pliny) 的文件
+  - 如果和我一樣固定 Navbar 的話需要調整 css 避免 anchor 標題被遮住
 
   ``` jsx
   <aside className="space-y hidden pt-10 lg:relative lg:col-span-1 lg:block">

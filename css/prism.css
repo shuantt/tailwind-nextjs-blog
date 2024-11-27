@@ -14,9 +14,13 @@
   @apply mt-0 rounded-t-none;
 }
 
+article pre {
+  @apply dark:bg-gray-800 dark:text-gray-200;
+}
+
 /* Code block styles */
 .code-highlight {
-  @apply float-left overflow-x-scroll w-full py-3 px-5 dark:bg-gray-800 dark:rounded dark:px-5 dark:py-3 dark:text-gray-200;
+  @apply float-left w-full overflow-x-scroll px-5 py-3 dark:rounded dark:bg-gray-800 dark:text-gray-200;
 }
 
 .code-line {

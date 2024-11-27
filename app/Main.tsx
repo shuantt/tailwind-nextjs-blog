@@ -54,7 +54,7 @@ export default function Home({ posts }) {
       </div>
       <div className="mb-8">
         {/* 文章列表 */}
-        <h1 className="text-2xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100 sm:text-2xl md:text-4xl ">
+        <h1 className="text-2xl font-extrabold tracking-wide text-gray-900 dark:text-gray-100 sm:text-2xl md:text-4xl ">
           最新貼文
         </h1>
         {/* <p className="text-lg leading-7 text-gray-500 dark:text-gray-400">
