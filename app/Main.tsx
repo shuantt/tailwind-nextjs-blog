@@ -21,12 +21,12 @@ export default function Home({ posts }) {
           </p>
           <div className="space-y-2 rounded-xl bg-gray-100 p-6 dark:bg-gray-700">
             <h3 className="text-base font-bold tracking-tight text-gray-900 dark:text-gray-100 ">
-              關於 Shuan.Dev 技樹筆記站
+              關於 Shuan.Dev 筆記站
             </h3>
             <p className="text-sm leading-8 md:text-base md:leading-10">
               為方便整理和閱讀，另開一個站
               <a
-                href="https://shuan-technote.vercel.app/"
+                href="https://shuan-technotes.vercel.app/"
                 className=" px-1 text-blue-500 underline hover:font-bold"
               >
                 Shuan.Dev
