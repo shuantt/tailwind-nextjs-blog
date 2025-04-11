@@ -6,7 +6,7 @@ const siteMetadata = {
   description: 'Journey in web development and life',
   language: 'zh-TW',
   theme: 'system', // system, dark or light
-  siteUrl: 'https://shuan-blog.vercel.app/',
+  siteUrl: 'https://blog.shuantt.com/',
   siteRepo: 'https://github.com/shuantt/tailwind-nextjs-blog',
   siteLogo: `${process.env.BASE_PATH || ''}/static/images/logo.png`,
   socialBanner: `${process.env.BASE_PATH || ''}/static/images/twitter-card.png`,
