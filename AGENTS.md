@@ -11,8 +11,8 @@ concise, and updated when the architecture, commands, or delivery workflow chang
 - MDX content is compiled by `contentlayer2`; `pliny` supplies blog, search, analytics,
   comments, and content helpers.
 - Yarn 3.6.1 is pinned in `.yarn/releases` and configured with the `node-modules` linker.
-- The production target is a static GitHub Pages export built by `.github/workflows/pages.yml`
-  on pushes to `main`.
+- Vercel Git integration is the production deployment path: feature branches create Preview
+  deployments, and pushes to `main` create Production deployments.
 - The public site language and locale are Traditional Chinese (`zh-TW`). Preserve UTF-8 when
   reading or editing Chinese content; apparent mojibake may be a terminal decoding issue.
 
@@ -43,7 +43,7 @@ When documentation and implementation disagree, prefer:
 - `css/`: Global Tailwind and Prism styles.
 - `scripts/`: Post-build RSS generation.
 - `contentlayer.config.ts`: MDX schema, computed fields, plugins, tags, and search generation.
-- `.github/workflows/pages.yml`: Node 20 static-export deployment pipeline.
+- `.github/workflows/quality.yml`: repository checks for pushes and pull requests.
 
 ## Commands
 
@@ -58,13 +58,6 @@ yarn serve
 yarn analyze
 yarn check
 yarn content:check
-```
-
-Match GitHub Pages locally with PowerShell environment variables (use equivalent syntax in
-other shells):
-
-```powershell
-$env:EXPORT='1'; $env:UNOPTIMIZED='1'; yarn build
 ```
 
 Useful non-destructive checks:
@@ -110,8 +103,8 @@ On Windows PowerShell, use `yarn.cmd` or
   deployment settings as incidental cleanup.
 - Canonical article routes use `/posts/...`; keep RSS, sitemap, JSON-LD, search, and internal
   links aligned with that route family.
-- Keep production features compatible with static export. GitHub Pages cannot run POST route
-  handlers, Server Actions, or Next.js response-header configuration.
+- Preserve Vercel and standard Next.js compatibility. Add runtime-only features such as route
+  handlers or Server Actions only when the product explicitly needs them.
 
 ## Content Conventions
 
@@ -136,8 +129,8 @@ On Windows PowerShell, use `yarn.cmd` or
 - Values prefixed with `NEXT_PUBLIC_` are exposed to browsers; all other integration keys must
   remain server-side.
 - Adding an external script, frame, image host, analytics service, or comment provider may also
-  require a deliberate Content Security Policy update in `next.config.js` for server deployments.
-  GitHub Pages does not apply Next.js response headers.
+  require a deliberate Content Security Policy update in `next.config.js`; Vercel applies the
+  resulting Next.js response-header configuration.
 
 ## Known Upgrade Constraints
 
@@ -149,9 +142,9 @@ On Windows PowerShell, use `yarn.cmd` or
   override.
 - `next lint` is deprecated in Next.js 15.5. Migrate to the ESLint CLI as part of the Next.js 16
   upgrade.
-- The deployed artifact is static and has no Node.js runtime. Audit findings in Contentlayer
-  telemetry and Next.js build-time image tooling must still be reviewed when upstream versions
-  change, but they are not deployed as request-handling services on GitHub Pages.
+- Current public pages are pre-rendered during the Vercel build and there is no custom API route.
+  Audit findings in Contentlayer telemetry and Next.js build-time image tooling still need review,
+  but those build-time packages are not request-handling services by default.
 
 ## Working Agreement
 

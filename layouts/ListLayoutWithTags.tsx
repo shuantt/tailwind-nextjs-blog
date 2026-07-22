@@ -161,7 +161,9 @@ export default function ListLayoutWithTags({
                           <div className="flex flex-wrap">
                             {tags
                               ?.sort((a, b) => a.localeCompare(b))
-                              .map((tag) => <Tag key={tag} text={tag} />)}
+                              .map((tag) => {
+                                return <Tag key={tag} text={tag} />
+                              })}
                           </div>
                         </div>
                         <div className="prose max-w-none text-gray-500 dark:text-gray-400">
