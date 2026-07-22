@@ -1,0 +1,119 @@
+media:
+  - name: post_images
+    label: 文章圖片
+    input: public/static/images/posts
+    output: /static/images/posts
+    categories: [image]
+    extensions: [jpg, jpeg, png, webp, gif]
+    rename: safe
+    commit:
+      identity: user
+      templates:
+        create: 'content(media): add {path}'
+        update: 'content(media): update {path}'
+        delete: 'content(media): remove {path}'
+        rename: 'content(media): rename {oldPath} to {newPath}'
+
+content:
+  - name: posts
+    label: 文章
+    type: collection
+    path: data/posts
+    format: yaml-frontmatter
+    subfolders: true
+    filename:
+      template: '{primary}.mdx'
+      field: create
+    view:
+      layout: tree
+      fields: [title, date, tags]
+      primary: title
+      sort: [date, title]
+      search: [title, summary, tags]
+      default:
+        sort: date
+        order: desc
+    operations:
+      create: true
+      rename: false
+      delete: false
+    commit:
+      identity: user
+      templates:
+        create: 'content(post): add {path}'
+        update: 'content(post): update {path}'
+    fields:
+      - name: title
+        label: 標題
+        type: string
+        required: true
+        options:
+          maxlength: 120
+      - name: date
+        label: 發布日期
+        type: date
+        required: true
+        options:
+          format: yyyy-MM-dd
+      - name: authors
+        label: 作者
+        type: select
+        default: [default]
+        required: true
+        description: 一般文章保留 Shuan Tseng 即可。
+        options:
+          multiple: true
+          min: 1
+          values:
+            - name: default
+              label: Shuan Tseng
+            - name: sparrowhawk
+              label: Sparrowhawk
+      - name: tags
+        label: 標籤
+        type: string
+        list: true
+      - name: summary
+        label: 摘要
+        type: text
+        required: true
+        options:
+          maxlength: 300
+      - name: images
+        label: 社群分享／橫幅圖片
+        type: image
+        options:
+          media: post_images
+          multiple:
+            max: 5
+          unique: true
+          extensions: [jpg, jpeg, png, webp, gif]
+          rename: safe
+      - name: layout
+        label: 文章版型
+        type: select
+        default: PostLayout
+        options:
+          values:
+            - name: PostLayout
+              label: 標準版型
+            - name: PostSimple
+              label: 簡潔版型
+            - name: PostBanner
+              label: 橫幅版型
+      - name: body
+        label: 內文
+        type: rich-text
+        required: true
+        options:
+          format: markdown
+          switcher: true
+          media: post_images
+          extensions: [jpg, jpeg, png, webp, gif]
+          rename: safe
+
+settings:
+  content:
+    merge: true
+  commit:
+    identity: user
