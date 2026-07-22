@@ -2,24 +2,43 @@ import Link from '@/components/Link'
 
 export default function NotFound() {
   return (
-    <div className="flex flex-col items-start justify-start md:mt-24 md:flex-row md:items-center md:justify-center md:space-x-6">
-      <div className="space-x-2 pb-8 pt-6 md:space-y-5">
-        <h1 className="text-6xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 md:border-r-2 md:px-6 md:text-8xl md:leading-14">
-          404
-        </h1>
-      </div>
-      <div className="max-w-md">
-        <p className="mb-4 text-xl font-bold leading-normal md:text-2xl">
-          Sorry we couldn't find this page.
+    <section className="grid min-h-[65vh] gap-10 border-b border-gray-300 py-16 dark:border-gray-800 sm:py-24 lg:grid-cols-12 lg:items-center">
+      <div className="lg:col-span-5">
+        <p className="text-xs font-bold uppercase tracking-[0.24em] text-primary-700 dark:text-primary-300">
+          Error / 404
         </p>
-        <p className="mb-8">But dont worry, you can find plenty of other things on our homepage.</p>
-        <Link
-          href="/"
-          className="focus:shadow-outline-blue inline rounded-lg border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium leading-5 text-white shadow transition-colors duration-150 hover:bg-blue-700 focus:outline-none dark:hover:bg-blue-500"
+        <p
+          aria-hidden="true"
+          className="mt-4 text-[7rem] font-bold leading-none tracking-[-0.08em] text-gray-300 dark:text-gray-800 sm:text-[10rem]"
         >
-          Back to homepage
-        </Link>
+          404
+        </p>
       </div>
-    </div>
+      <div className="lg:col-span-6 lg:col-start-7">
+        <h1 className="text-4xl font-bold tracking-[-0.045em] text-gray-950 dark:text-gray-50 sm:text-6xl">
+          這一頁，暫時不在這裡。
+        </h1>
+        <p className="mt-6 max-w-lg text-base leading-8 text-gray-600 dark:text-gray-400">
+          可能是網址輸入錯誤，或內容已經移動。你可以回到首頁，或從文章列表繼續逛逛。
+        </p>
+        <div className="mt-9 flex flex-wrap gap-5">
+          <Link
+            href="/"
+            className="inline-flex min-h-11 items-center bg-gray-950 px-5 text-sm font-bold text-white transition-colors hover:bg-primary-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:bg-gray-50 dark:text-gray-950 dark:hover:bg-primary-200 dark:focus-visible:ring-offset-gray-950"
+          >
+            回到首頁
+          </Link>
+          <Link
+            href="/posts"
+            className="inline-flex min-h-11 items-center border-b border-gray-950 text-sm font-bold text-gray-950 hover:border-primary-600 hover:text-primary-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:border-gray-50 dark:text-gray-50 dark:hover:text-primary-300"
+          >
+            瀏覽文章{' '}
+            <span aria-hidden="true" className="ml-2">
+              →
+            </span>
+          </Link>
+        </div>
+      </div>
+    </section>
   )
 }

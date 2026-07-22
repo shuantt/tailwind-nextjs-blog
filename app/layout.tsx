@@ -3,7 +3,6 @@ import 'pliny/search/algolia.css'
 import 'remark-github-blockquote-alert/alert.css'
 import { Space_Grotesk } from 'next/font/google'
 import { Analytics, AnalyticsConfig } from 'pliny/analytics'
-import { GA } from 'pliny/analytics/GoogleAnalytics'
 import { SearchProvider } from './search-providers'
 import { SearchConfig } from 'pliny/search'
 import Header from '@/components/Header'
@@ -12,8 +11,6 @@ import Footer from '@/components/Footer'
 import siteMetadata from '@/data/siteMetadata'
 import { ThemeProviders } from './theme-providers'
 import { Metadata } from 'next'
-
-const googleAnalyticsId = 'G-V5KP9LC9B6' // e.g. UA-000000-2 or G-XXXXXXX
 
 const space_grotesk = Space_Grotesk({
   subsets: ['latin'],
@@ -34,7 +31,7 @@ export const metadata: Metadata = {
     url: './',
     siteName: siteMetadata.title,
     images: [siteMetadata.socialBanner],
-    locale: 'en_US',
+    locale: 'zh_TW',
     type: 'website',
   },
   alternates: {
@@ -58,6 +55,9 @@ export const metadata: Metadata = {
     title: siteMetadata.title,
     card: 'summary_large_image',
     images: [siteMetadata.socialBanner],
+  },
+  verification: {
+    google: 'bUluD2rAEOQMmpI9K8E-kmtsXUnfzm4ZvyE4DV8AHEw',
   },
 }
 
@@ -97,14 +97,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <meta name="theme-color" media="(prefers-color-scheme: light)" content="#fff" />
       <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000" />
       <link rel="alternate" type="application/rss+xml" href={`${basePath}/feed.xml`} />
-      <meta name="google-site-verification" content="bUluD2rAEOQMmpI9K8E-kmtsXUnfzm4ZvyE4DV8AHEw" />
       <body className="bg-white pl-[calc(100vw-100%)] text-black antialiased dark:bg-gray-950 dark:text-white">
+        <a
+          href="#main-content"
+          className="sr-only fixed left-4 top-4 z-80 bg-gray-950 px-4 py-3 text-sm font-semibold text-white focus:not-sr-only dark:bg-gray-50 dark:text-gray-950"
+        >
+          跳至主要內容
+        </a>
         <ThemeProviders>
           <Analytics analyticsConfig={siteMetadata.analytics as AnalyticsConfig} />
           <SectionContainer>
-            <SearchProvider>
+            <SearchProvider basePath={basePath}>
               <Header />
-              <main className="mb-auto">{children}</main>
+              <main id="main-content" className="mb-auto">
+                {children}
+              </main>
             </SearchProvider>
             <Footer />
           </SectionContainer>

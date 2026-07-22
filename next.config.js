@@ -63,7 +63,7 @@ const unoptimized = process.env.UNOPTIMIZED ? true : undefined
  **/
 module.exports = () => {
   const plugins = [withContentlayer, withBundleAnalyzer]
-  return plugins.reduce((acc, next) => next(acc), {
+  const config = {
     output,
     basePath,
     reactStrictMode: true,
@@ -80,14 +80,6 @@ module.exports = () => {
       ],
       unoptimized,
     },
-    async headers() {
-      return [
-        {
-          source: '/(.*)',
-          headers: securityHeaders,
-        },
-      ]
-    },
     webpack: (config, options) => {
       config.module.rules.push({
         test: /\.svg$/,
@@ -96,5 +88,16 @@ module.exports = () => {
 
       return config
     },
-  })
+  }
+
+  if (!output) {
+    config.headers = async () => [
+      {
+        source: '/(.*)',
+        headers: securityHeaders,
+      },
+    ]
+  }
+
+  return plugins.reduce((acc, next) => next(acc), config)
 }

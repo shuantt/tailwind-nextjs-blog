@@ -102,7 +102,7 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
                 </div>
 
                 {/* DESKTOP TABLE OF CONTENTS */}
-                <aside className="space-y hidden pt-10 lg:relative lg:col-span-1 lg:block">
+                <aside className="hidden pt-10 lg:relative lg:col-span-1 lg:block">
                   <div className="top-32 mb-4 lg:sticky">
                     <h2 className="mb-4 text-xl font-bold">目錄</h2>
                     <TOCInline

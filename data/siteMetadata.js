@@ -3,10 +3,10 @@ const siteMetadata = {
   title: `Shuan.Blog`,
   author: 'Shuan Tseng',
   headerTitle: 'Shuan.Blog',
-  description: 'Journey in web development and life',
+  description: '關於職涯、生活、個人創作、專案，以及軟體與產品使用經驗的記錄。',
   language: 'zh-TW',
   theme: 'system', // system, dark or light
-  siteUrl: 'https://blog.shuantt.com/',
+  siteUrl: 'https://blog.shuantt.com',
   siteRepo: 'https://github.com/shuantt/tailwind-nextjs-blog',
   siteLogo: `${process.env.BASE_PATH || ''}/static/images/logo.png`,
   socialBanner: `${process.env.BASE_PATH || ''}/static/images/twitter-card.png`,
@@ -49,11 +49,6 @@ const siteMetadata = {
       googleAnalyticsId: 'G-V5KP9LC9B6', // e.g. G-XXXXXXX
     },
   },
-  newsletter: {
-    // supports mailchimp, buttondown, convertkit, klaviyo, revue, emailoctopus, beehive
-    // Please add your .env file and modify it according to your selection
-    provider: 'buttondown',
-  },
   comments: {
     // If you want to use an analytics provider you have to add it to the
     // content security policy in the `next.config.js` file.
@@ -87,7 +82,7 @@ const siteMetadata = {
   search: {
     provider: 'kbar', // kbar or algolia
     kbarConfig: {
-      searchDocumentsPath: `${process.env.BASE_PATH || ''}/search.json`, // path to load documents to search
+      searchDocumentsPath: '/search.json',
     },
     // provider: 'algolia',
     // algoliaConfig: {

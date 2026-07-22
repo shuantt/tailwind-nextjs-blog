@@ -18,11 +18,11 @@ summary: 使用開源模板重架部落格(感謝作者 timlrx) ，紀錄一下�
 - Tags 標籤雲
 - Prev & Next Buttons
 - Comment System ( support giscus, utterances, Disqus )
-- Search with kbar ( Ctrl + K ) 
+- Search with kbar ( Ctrl + K )
 - Markdown TOC ( Table Of Content, 但只提供置頂版 )
 - Newsletter, RSS, Analytics ( ex. GA) ... etc.
 - SEO friendly、Lighthouse performance 90+
-- 易設定的巢狀路由 
+- 易設定的巢狀路由
 - 易調整 code block 樣式 ( prism.css )
 - 3 種貼文布局、文章預覽、可使用複數作者 ( 可作為團隊 Blog )
 - 好看的作品集和關於我頁面 (Projects、About)
@@ -55,18 +55,18 @@ summary: 使用開源模板重架部落格(感謝作者 timlrx) ，紀錄一下�
 ## 自己調整的部分
 
 - **首頁樣式：** 調整空間寬高並加了首頁圖片，想要有點自己的風格 (記得要使用 Image 元件，不然會有警告)
-- **Projects：** 調整了 Project 頁的卡牌樣式，新增更多專案資訊 
+- **Projects：** 調整了 Project 頁的卡牌樣式，新增更多專案資訊
 - **Tags**：移除標籤雲，因為 Posts 頁面有同樣功能，未來考慮增加分類項目
-- **Navbar：** 如首頁提到的，導覽列上的 `Shuan.Dev` 會導向外部筆記站，調整如為外部連結加上 icon
 - **字體樣式：** 作者使用的是英文，原樣式用於中文標題上字體太粗、文字太緊密，調整不使用 extrabold 和 tight
 - **載入留言：** 作者僅放了 `Load Comments` 的按鈕，但樣式太不像可互動按鈕，因此調整了按鈕樣式
 - **kbar：** 將搜尋調整成全文索引。原本預設只會搜尋 `title` 和 `summary`，頭痛了一下才發現作者有提供修改方式，參考 `/data/faq/customize-kbar-search.md`
 - **code block：** 深色模式背景和網站背景色太近，調整了 `/css/prism.css`；並且加入行號設定，行號設定需調整 `contentlayer.config.ts` 中的 `rehypePrismPlus`，可參考套件庫 [rehype-prism-plus](https://github.com/timlrx/rehype-prism-plus?tab=readme-ov-file) 說明
 - **側邊目錄：** 作者在 [這篇 Issue 表示](https://github.com/timlrx/tailwind-nextjs-starter-blog/issues/936) 只做置頂 TOC 是個人偏好。但我偏好將目錄固定在頁面上，因此將原有 TOC 元件調整為 Desktop 版本會顯示側邊固定目錄
+
   - 附上 TOC 部分設定：可以看 `TOCInline` 元件的使用方式，更多說明請參考依賴套件庫 [pliny](https://github.com/timlrx/pliny) 的文件
   - 如果和我一樣固定 Navbar 的話需要調整 css 避免 anchor 標題被遮住
 
-  ``` jsx
+  ```jsx
   <aside className="space-y hidden pt-10 lg:relative lg:col-span-1 lg:block">
     <div className="top-32 mb-4 lg:sticky">
       <h2 className="mb-4 text-xl font-bold">目錄</h2>
@@ -84,7 +84,7 @@ summary: 使用開源模板重架部落格(感謝作者 timlrx) ，紀錄一下�
 
 ## 頭像和首頁圖片
 
-花超多時間**畫頭像** XD 原本就希望部落格有像素風，但在 Hexo 時期只改了字體。最近買了 Pixel Jeff 的兩堂線上像素畫教學課(好瘋)，趁著勢頭畫一下也感謝插畫家朋友的指點，成果非常滿意!  
+花超多時間**畫頭像** XD 原本就希望部落格有像素風，但在 Hexo 時期只改了字體。最近買了 Pixel Jeff 的兩堂線上像素畫教學課(好瘋)，趁著勢頭畫一下也感謝插畫家朋友的指點，成果非常滿意!
 
 目前還在思考 logo 和首頁圖片，預計會有點小動畫感，但可能要先處理 Technotes 站台架設，不然現在有點畫上癮，搞不好會花幾周都在畫圖 XD
 
@@ -93,4 +93,3 @@ summary: 使用開源模板重架部落格(感謝作者 timlrx) ，紀錄一下�
 雖然搞了好幾天，但研究套件和看別人如何建構 Next.js 專案收穫良多也很有趣。總結就是這真的是個很棒的部落格模板，快用起來吧！如果架設時遇到問題也可以留言或聯絡我，我會盡力幫忙。
 
 **最後，感謝 timlrx 和 Eason Chang 的分享，讓我找到滿意的新家！**
-

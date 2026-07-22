@@ -2,15 +2,26 @@
 
 import { KBarSearchProvider } from 'pliny/search/KBar'
 import { useRouter } from 'next/navigation'
-import { CoreContent } from 'pliny/utils/contentlayer'
-import { Blog } from 'contentlayer/generated'
+import { ReactNode } from 'react'
 
-export const SearchProvider = ({ children }) => {
+interface SearchProviderProps {
+  basePath: string
+  children: ReactNode
+}
+
+interface SearchDocument {
+  path: string
+  title: string
+  tags: string[]
+  body: { raw: string }
+}
+
+export const SearchProvider = ({ basePath, children }: SearchProviderProps) => {
   const router = useRouter()
   return (
     <KBarSearchProvider
       kbarConfig={{
-        searchDocumentsPath: 'search.json',
+        searchDocumentsPath: `${basePath}/search.json`,
         defaultActions: [
           {
             id: 'homepage',
@@ -30,7 +41,7 @@ export const SearchProvider = ({ children }) => {
           },
         ],
         onSearchDocumentsLoad(json) {
-          return json.map((post: Blog) => ({
+          return json.map((post: SearchDocument) => ({
             id: post.path,
             name: post.title,
             keywords: post.body.raw,

@@ -23,10 +23,9 @@ import rehypeCitation from 'rehype-citation'
 import rehypePrismPlus from 'rehype-prism-plus'
 import rehypePresetMinify from 'rehype-preset-minify'
 import siteMetadata from './data/siteMetadata'
-import { allCoreContent, sortPosts } from 'pliny/utils/contentlayer.js'
+import { sortPosts } from 'pliny/utils/contentlayer.js'
 
 const root = process.cwd()
-const isProduction = process.env.NODE_ENV === 'production'
 
 // heroicon mini link
 const icon = fromHtmlIsomorphic(
@@ -64,7 +63,7 @@ const computedFields: ComputedFields = {
 function createTagCount(allBlogs) {
   const tagCount: Record<string, number> = {}
   allBlogs.forEach((file) => {
-    if (file.tags && (!isProduction || file.draft !== true)) {
+    if (file.tags && file.draft !== true) {
       file.tags.forEach((tag) => {
         const formattedTag = slug(tag)
         if (formattedTag in tagCount) {
@@ -78,28 +77,27 @@ function createTagCount(allBlogs) {
   writeFileSync('./app/tag-data.json', JSON.stringify(tagCount))
 }
 
-// function createSearchIndex(allBlogs) {
-//   if (
-//     siteMetadata?.search?.provider === 'kbar' &&
-//     siteMetadata.search.kbarConfig.searchDocumentsPath
-//   ) {
-//     writeFileSync(
-//       `public/${path.basename(siteMetadata.search.kbarConfig.searchDocumentsPath)}`,
-//       JSON.stringify(allCoreContent(sortPosts(allBlogs)))
-//     )
-//     console.log('Local search index generated...')
-//   }
-// }
-
 function createSearchIndex(allBlogs) {
   if (
     siteMetadata?.search?.provider === 'kbar' &&
     siteMetadata.search.kbarConfig.searchDocumentsPath
   ) {
-    writeFileSync(
-      `public/${siteMetadata.search.kbarConfig.searchDocumentsPath}`,
-      JSON.stringify(sortPosts(allBlogs))
+    const searchDocumentsPath = siteMetadata.search.kbarConfig.searchDocumentsPath.replace(
+      /^\/+/,
+      ''
     )
+    const outputPath = path.join('public', searchDocumentsPath)
+    const searchDocuments = sortPosts(allBlogs.filter((post) => post.draft !== true)).map(
+      (post) => ({
+        path: post.path,
+        title: post.title,
+        summary: post.summary,
+        tags: post.tags,
+        body: { raw: post.body.raw },
+      })
+    )
+
+    writeFileSync(outputPath, JSON.stringify(searchDocuments))
     console.log('Local search index generated...')
   }
 }

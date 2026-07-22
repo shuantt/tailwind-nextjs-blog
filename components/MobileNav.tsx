@@ -1,22 +1,23 @@
 'use client'
 
 import { Dialog, Transition } from '@headlessui/react'
-import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock'
-import { Fragment, useState, useEffect, useRef } from 'react'
+import { clearAllBodyScrollLocks, disableBodyScroll, enableBodyScroll } from 'body-scroll-lock'
+import { Fragment, useEffect, useRef, useState } from 'react'
 import Link from './Link'
 import headerNavLinks from '@/data/headerNavLinks'
 
 const MobileNav = () => {
   const [navShow, setNavShow] = useState(false)
-  const navRef = useRef(null)
+  const navRef = useRef<HTMLElement | null>(null)
 
   const onToggleNav = () => {
     setNavShow((status) => {
-      if (status) {
-        enableBodyScroll(navRef.current)
-      } else {
-        // Prevent scrolling
-        disableBodyScroll(navRef.current)
+      if (navRef.current) {
+        if (status) {
+          enableBodyScroll(navRef.current)
+        } else {
+          disableBodyScroll(navRef.current)
+        }
       }
       return !status
     })
@@ -24,11 +25,17 @@ const MobileNav = () => {
 
   useEffect(() => {
     return clearAllBodyScrollLocks
-  })
+  }, [])
 
   return (
     <>
-      <button aria-label="Toggle Menu" onClick={onToggleNav} className="sm:hidden">
+      <button
+        type="button"
+        aria-label="Toggle Menu"
+        aria-expanded={navShow}
+        onClick={onToggleNav}
+        className="sm:hidden"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 20 20"
@@ -105,6 +112,7 @@ const MobileNav = () => {
               </nav>
 
               <button
+                type="button"
                 className="fixed right-4 top-7 z-80 h-16 w-16 p-4 text-gray-900 hover:text-primary-500 dark:text-gray-100 dark:hover:text-primary-400"
                 aria-label="Toggle Menu"
                 onClick={onToggleNav}
