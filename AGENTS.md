@@ -110,9 +110,9 @@ On Windows PowerShell, use `yarn.cmd` or
 
 - Add publishable articles under `data/posts/<category>/<slug>.mdx`; keep unfinished material in
   `data/draft/` unless the user requests another workflow.
-- Common frontmatter fields are `title`, `date`, `authors`, `draft`, `tags`, `summary`, `images`,
-  `layout`, `lastmod`, `bibliography`, and `canonicalUrl`. `title` and `date` are required by the
-  schema.
+- Common frontmatter fields are `title`, `date`, `authors`, `draft`, `category`, `tags`, `summary`,
+  `images`, `layout`, `lastmod`, `bibliography`, and `canonicalUrl`. `title`, `date`, and `category`
+  are required by the schema. Each post has one non-empty string category and may have multiple tags.
 - Use author slugs that exist under `data/authors/`; the normal fallback is `default`.
 - Available post layouts are `PostLayout`, `PostSimple`, and `PostBanner`.
 - Put referenced local media under `public/static/images/` and use root-relative URLs such as

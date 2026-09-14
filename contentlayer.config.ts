@@ -77,6 +77,24 @@ function createTagCount(allBlogs) {
   writeFileSync('./app/tag-data.json', JSON.stringify(tagCount))
 }
 
+/**
+ * Count the occurrences of all categories across blog posts and write to json file
+ */
+function createCategoryCount(allBlogs) {
+  const categoryCount: Record<string, number> = {}
+  allBlogs.forEach((file) => {
+    if (file.category && file.draft !== true) {
+      const formattedCategory = slug(file.category)
+      if (formattedCategory in categoryCount) {
+        categoryCount[formattedCategory] += 1
+      } else {
+        categoryCount[formattedCategory] = 1
+      }
+    }
+  })
+  writeFileSync('./app/category-data.json', JSON.stringify(categoryCount))
+}
+
 function createSearchIndex(allBlogs) {
   if (
     siteMetadata?.search?.provider === 'kbar' &&
@@ -92,6 +110,7 @@ function createSearchIndex(allBlogs) {
         path: post.path,
         title: post.title,
         summary: post.summary,
+        category: post.category,
         tags: post.tags,
         body: { raw: post.body.raw },
       })
@@ -109,6 +128,7 @@ export const Blog = defineDocumentType(() => ({
   fields: {
     title: { type: 'string', required: true },
     date: { type: 'date', required: true },
+    category: { type: 'string', required: true },
     tags: { type: 'list', of: { type: 'string' }, default: [] },
     lastmod: { type: 'date' },
     draft: { type: 'boolean' },
@@ -192,6 +212,7 @@ export default makeSource({
   onSuccess: async (importData) => {
     const { allBlogs } = await importData()
     createTagCount(allBlogs)
+    createCategoryCount(allBlogs)
     createSearchIndex(allBlogs)
   },
 })
