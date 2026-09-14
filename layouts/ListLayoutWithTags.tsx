@@ -9,7 +9,9 @@ import type { Blog } from 'contentlayer/generated'
 import Link from '@/components/Link'
 import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
+import { categoryConfig } from '@/data/categoryData'
 import tagData from 'app/tag-data.json'
+import categoryData from 'app/category-data.json'
 
 interface PaginationProps {
   totalPages: number
@@ -70,6 +72,7 @@ export default function ListLayoutWithTags({
 }: ListLayoutProps) {
   const pathname = usePathname()
   const tagCounts = tagData as Record<string, number>
+  const categoryCounts = categoryData as Record<string, number>
   const tagKeys = Object.keys(tagCounts)
   // const sortedTags = tagKeys.sort((a, b) => tagCounts[b] - tagCounts[a])
   const sortedTags = tagKeys.sort((a, b) => {
@@ -89,6 +92,14 @@ export default function ListLayoutWithTags({
     // 如果是同类型，使用 localeCompare 进行排序
     return a.localeCompare(b, 'zh')
   })
+  const visibleTags = sortedTags.slice(0, 8)
+
+  const activeCategorySlug = pathname.startsWith('/categories/')
+    ? decodeURI(pathname.split('/categories/')[1])
+    : null
+  const activeTagSlug = pathname.startsWith('/tags/')
+    ? decodeURI(pathname.split('/tags/')[1])
+    : null
 
   const displayPosts = initialDisplayPosts.length > 0 ? initialDisplayPosts : posts
 
@@ -104,20 +115,50 @@ export default function ListLayoutWithTags({
           <div className="hidden h-full max-h-screen min-w-[280px] max-w-[280px] flex-wrap overflow-auto rounded bg-gray-50 pt-5 shadow-md dark:bg-gray-900/70 dark:shadow-gray-800/40 sm:flex">
             <div className="px-6 py-4">
               {pathname.startsWith('/posts') ? (
-                <h3 className="font-bold uppercase text-primary-500">All Posts</h3>
+                <h3 className="font-bold uppercase text-primary-500">全部文章</h3>
               ) : (
                 <Link
                   href={`/posts`}
                   className="font-bold uppercase text-gray-700 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-500"
                 >
-                  All Posts
+                  全部文章
                 </Link>
               )}
+
+              <h4 className="mt-6 text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">
+                類別
+              </h4>
               <ul>
-                {sortedTags.map((t) => {
+                {categoryConfig.map((c) => {
+                  const count = categoryCounts[c.slug] ?? 0
+                  return (
+                    <li key={c.slug} className="my-3">
+                      {activeCategorySlug === c.slug ? (
+                        <h3 className="inline px-3 py-2 text-sm font-bold uppercase text-primary-500">
+                          {`${c.label} (${count})`}
+                        </h3>
+                      ) : (
+                        <Link
+                          href={`/categories/${c.slug}`}
+                          className="px-3 py-2 text-sm font-medium uppercase text-gray-500 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-500"
+                          aria-label={`查看分類 ${c.label} 的文章`}
+                        >
+                          {`${c.label} (${count})`}
+                        </Link>
+                      )}
+                    </li>
+                  )
+                })}
+              </ul>
+
+              <h4 className="mt-6 text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">
+                標籤
+              </h4>
+              <ul>
+                {visibleTags.map((t) => {
                   return (
                     <li key={t} className="my-3">
-                      {decodeURI(pathname.split('/tags/')[1]) === slug(t) ? (
+                      {activeTagSlug === slug(t) ? (
                         <h3 className="inline px-3 py-2 text-sm font-bold uppercase text-primary-500">
                           {`${t} (${tagCounts[t]})`}
                         </h3>
@@ -134,18 +175,36 @@ export default function ListLayoutWithTags({
                   )
                 })}
               </ul>
+              <Link
+                href="/tags"
+                className="mt-3 inline-block px-3 py-2 text-sm font-medium uppercase text-gray-500 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-500"
+              >
+                查看全部標籤
+              </Link>
             </div>
           </div>
           <div>
             <ul>
               {displayPosts.map((post) => {
-                const { path, date, title, summary, tags } = post
+                const { path, date, title, summary, tags, category } = post
+                const categoryItem = categoryConfig.find((c) => c.label === category)
                 return (
                   <li key={path} className="py-5">
                     <article className="flex flex-col space-y-2 xl:space-y-0">
                       <dl>
                         <dt className="sr-only">Published on</dt>
-                        <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
+                        <dd className="flex flex-wrap items-center gap-x-2 text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
+                          {category && (
+                            <>
+                              <Link
+                                href={`/categories/${categoryItem?.slug ?? slug(category)}`}
+                                className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+                              >
+                                {category}
+                              </Link>
+                              <span aria-hidden="true">·</span>
+                            </>
+                          )}
                           <time dateTime={date} suppressHydrationWarning>
                             {formatDate(date, siteMetadata.locale)}
                           </time>

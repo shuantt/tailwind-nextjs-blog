@@ -7,7 +7,7 @@ const postsDirectory = path.join(root, 'data', 'posts')
 const authorsDirectory = path.join(root, 'data', 'authors')
 const publicDirectory = path.join(root, 'public')
 const allowedLayouts = new Set(['PostLayout', 'PostSimple', 'PostBanner'])
-const staticRoutes = new Set(['/', '/about', '/posts', '/projects', '/tags'])
+const staticRoutes = new Set(['/', '/about', '/posts', '/projects', '/tags', '/categories'])
 const errors = []
 
 function findContentFiles(directory) {
@@ -80,6 +80,10 @@ for (const file of postFiles) {
     report(file, `invalid date: ${data.date}`)
   }
 
+  if (typeof data.category !== 'string' || data.category.trim().length === 0) {
+    report(file, 'category must be a single non-empty string')
+  }
+
   if (data.tags && !Array.isArray(data.tags)) {
     report(file, 'tags must be an array')
   }
@@ -139,6 +143,7 @@ for (const file of postFiles) {
       !staticRoutes.has(href) &&
       !routeToFile.has(href) &&
       !href.startsWith('/tags/') &&
+      !href.startsWith('/categories/') &&
       !href.startsWith('/static/')
     ) {
       report(file, `unknown internal link: ${match[1]}`)
