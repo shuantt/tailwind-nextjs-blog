@@ -18,14 +18,14 @@ export async function generateMetadata(props: {
     title,
     description: `${siteMetadata.title} ${title} 分類文章`,
     alternates: {
-      canonical: './',
+      canonical: `/categories/${categoryItem?.slug ?? categorySlug}`,
     },
   })
 }
 
 export const generateStaticParams = async () => {
   return categoryConfig.map((c) => ({
-    category: encodeURI(c.slug),
+    category: c.slug,
   }))
 }
 

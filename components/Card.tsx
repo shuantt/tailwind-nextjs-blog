@@ -29,7 +29,7 @@ const Card = ({
   const contentOrder = index % 2 === 0 ? 'lg:order-2' : 'lg:order-1'
 
   return (
-    <article className="grid gap-8 border-b border-gray-300 py-14 dark:border-gray-800 sm:py-20 lg:grid-cols-12 lg:items-stretch lg:gap-12">
+    <article className="grid gap-8 border-b border-gray-300 py-10 dark:border-gray-800 sm:py-12 lg:grid-cols-12 lg:items-stretch lg:gap-12 lg:py-20">
       <div
         className={`group overflow-hidden bg-gray-200 dark:bg-gray-900 lg:col-span-7 ${imageOrder}`}
       >
@@ -64,14 +64,14 @@ const Card = ({
       </div>
 
       <div className={`flex flex-col lg:col-span-5 ${contentOrder}`}>
-        <p className="text-xs font-bold uppercase tracking-[0.22em] text-primary-700 dark:text-primary-300">
+        <p className="text-xs font-bold uppercase tracking-[0.22em] text-primary-500">
           Project {String(index + 1).padStart(2, '0')}
         </p>
-        <h2 className="mt-5 text-4xl font-bold tracking-[-0.04em] text-gray-950 dark:text-gray-50 sm:text-5xl">
+        <h2 className="mt-5 text-3xl font-bold tracking-tight text-gray-950 dark:text-gray-50 sm:text-4xl md:text-5xl">
           {primaryUrl ? (
             <Link
               href={primaryUrl}
-              className="transition-colors hover:text-primary-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:hover:text-primary-300"
+              className="transition-colors hover:text-primary-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:hover:text-primary-400"
             >
               {title}
             </Link>
@@ -100,7 +100,7 @@ const Card = ({
           {demoUrl && (
             <Link
               href={demoUrl}
-              className="border-b border-gray-950 pb-1 text-sm font-bold text-gray-950 transition-colors hover:border-primary-600 hover:text-primary-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:border-gray-50 dark:text-gray-50 dark:hover:border-primary-300 dark:hover:text-primary-300"
+              className="border-b border-gray-950 pb-1 text-sm font-bold text-gray-950 transition-colors hover:border-primary-600 hover:text-primary-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:border-gray-50 dark:text-gray-50 dark:hover:border-primary-400 dark:hover:text-primary-400"
             >
               查看作品 <span aria-hidden="true">↗</span>
             </Link>
@@ -108,7 +108,7 @@ const Card = ({
           {apiUrl && (
             <Link
               href={apiUrl}
-              className="border-b border-gray-400 pb-1 text-sm font-bold text-gray-600 transition-colors hover:border-primary-600 hover:text-primary-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:text-gray-400 dark:hover:text-primary-300"
+              className="border-b border-gray-400 pb-1 text-sm font-bold text-gray-600 transition-colors hover:border-primary-600 hover:text-primary-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:text-gray-400 dark:hover:text-primary-400"
             >
               API 文件 <span aria-hidden="true">↗</span>
             </Link>

@@ -1,11 +1,12 @@
 /** @type {import("pliny/config").PlinyConfig } */
 const siteMetadata = {
-  title: `Shuan.Blog`,
+  title: `SHUANTT`,
   author: 'Shuan Tseng',
-  headerTitle: 'Shuan.Blog',
+  headerTitle: 'SHUANTT',
+  headerTagline: 'DEV & DESIGN BY SHUAN TSENG',
   description: '關於職涯、生活、個人創作、專案，以及軟體與產品使用經驗的記錄。',
   language: 'zh-TW',
-  theme: 'system', // system, dark or light
+  theme: 'system', // initial load follows OS preference; switch button only offers light/dark
   siteUrl: 'https://blog.shuantt.com',
   siteRepo: 'https://github.com/shuantt/tailwind-nextjs-blog',
   siteLogo: `${process.env.BASE_PATH || ''}/static/images/logo.png`,
