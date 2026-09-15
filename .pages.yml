@@ -26,7 +26,7 @@ content:
       field: create
     view:
       layout: tree
-      fields: [title, date, tags]
+      fields: [title, date, category, tags]
       primary: title
       sort: [date, title]
       search: [title, summary, tags]
@@ -69,6 +69,24 @@ content:
               label: Shuan Tseng
             - name: sparrowhawk
               label: Sparrowhawk
+      - name: draft
+        label: 草稿
+        type: boolean
+        default: false
+        description: 開啟後文章不會出現在正式站上，可以先存起來之後再發布。
+      - name: category
+        label: 分類
+        type: select
+        required: true
+        description: 對應網站上的三個固定分類，務必選一個，不然網站會建置失敗。
+        options:
+          values:
+            - name: 產品開發
+              label: 產品開發
+            - name: 學習成長
+              label: 學習成長
+            - name: 生活紀錄
+              label: 生活紀錄
       - name: tags
         label: 標籤
         type: string
