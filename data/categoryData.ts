@@ -5,7 +5,7 @@ export interface CategoryItem {
   slug: string
 }
 
-const categoryLabels = ['產品開發', '訓練紀錄', '生活／職涯']
+const categoryLabels = ['產品開發', '學習成長', '生活紀錄']
 
 export const categoryConfig: CategoryItem[] = categoryLabels.map((label) => ({
   label,

@@ -103,87 +103,186 @@ export default function ListLayoutWithTags({
 
   const displayPosts = initialDisplayPosts.length > 0 ? initialDisplayPosts : posts
 
+  const filters = (
+    <nav aria-label="文章分類與標籤" className="px-6 py-4">
+      {pathname.startsWith('/posts') ? (
+        <Link href="/posts" aria-current="page" className="font-bold text-primary-500">
+          全部文章
+        </Link>
+      ) : (
+        <Link
+          href={`/posts`}
+          className="font-bold uppercase text-gray-700 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-500"
+        >
+          全部文章
+        </Link>
+      )}
+
+      <h4 className="mt-6 text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">
+        類別
+      </h4>
+      <ul>
+        {categoryConfig.map((c) => {
+          const count = categoryCounts[c.slug] ?? 0
+          return (
+            <li key={c.slug} className="my-3">
+              {count === 0 ? (
+                <span className="px-3 py-2 text-sm text-gray-400 dark:text-gray-500">{`${c.label} (0)`}</span>
+              ) : activeCategorySlug === c.slug ? (
+                <span
+                  aria-current="page"
+                  className="inline px-3 py-2 text-sm font-bold uppercase text-primary-500"
+                >
+                  {`${c.label} (${count})`}
+                </span>
+              ) : (
+                <Link
+                  href={`/categories/${c.slug}`}
+                  className="px-3 py-2 text-sm font-medium uppercase text-gray-500 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-500"
+                  aria-label={`查看分類 ${c.label} 的文章`}
+                >
+                  {`${c.label} (${count})`}
+                </Link>
+              )}
+            </li>
+          )
+        })}
+      </ul>
+
+      <h4 className="mt-6 text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">
+        標籤
+      </h4>
+      <ul>
+        {visibleTags.map((t) => {
+          return (
+            <li key={t} className="my-3">
+              {activeTagSlug === slug(t) ? (
+                <span
+                  aria-current="page"
+                  className="inline px-3 py-2 text-sm font-bold uppercase text-primary-500"
+                >
+                  {`${t} (${tagCounts[t]})`}
+                </span>
+              ) : (
+                <Link
+                  href={`/tags/${slug(t)}`}
+                  className="px-3 py-2 text-sm font-medium uppercase text-gray-500 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-500"
+                  aria-label={`View posts tagged ${t}`}
+                >
+                  {`${t} (${tagCounts[t]})`}
+                </Link>
+              )}
+            </li>
+          )
+        })}
+      </ul>
+      <Link
+        href="/tags"
+        className="mt-3 inline-block px-3 py-2 text-sm font-medium uppercase text-gray-500 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-500"
+      >
+        查看全部標籤
+      </Link>
+    </nav>
+  )
+
+  // Below `lg` (tablet/iPad-Pro-portrait and phones), category/tag filters used
+  // to live inside a <details>/<summary> toggle the user had to tap open first.
+  // Replaced with always-visible, horizontally-scrollable pill rows so both
+  // categories and tags are one tap away instead of hidden behind a toggle.
+  const activeChipClassName =
+    'inline-flex shrink-0 items-center rounded-full bg-primary-500 px-3 py-1.5 text-xs font-semibold text-white dark:bg-primary-700'
+  const chipClassName =
+    'inline-flex shrink-0 items-center rounded-full border border-gray-300 px-3 py-1.5 text-xs font-medium text-gray-600 transition-colors hover:border-primary-500 hover:text-primary-500 dark:border-gray-600 dark:text-gray-300 dark:hover:border-primary-400 dark:hover:text-primary-400'
+  const disabledChipClassName =
+    'inline-flex shrink-0 items-center rounded-full border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-300 dark:border-gray-700 dark:text-gray-600'
+  const scrollRowClassName =
+    'scrollbar-hide -mx-1 flex gap-2 overflow-x-auto px-1 pb-1 [&::-webkit-scrollbar]:hidden'
+
+  const mobileFilters = (
+    <div className="mb-6 lg:hidden">
+      <h4 className="mb-2 px-0.5 text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">
+        類別
+      </h4>
+      <div className={scrollRowClassName}>
+        {pathname.startsWith('/posts') ? (
+          <span aria-current="page" className={activeChipClassName}>
+            全部文章
+          </span>
+        ) : (
+          <Link href="/posts" className={chipClassName}>
+            全部文章
+          </Link>
+        )}
+        {categoryConfig.map((c) => {
+          const count = categoryCounts[c.slug] ?? 0
+          if (count === 0) {
+            return (
+              <span key={c.slug} className={disabledChipClassName}>
+                {`${c.label} (0)`}
+              </span>
+            )
+          }
+          return activeCategorySlug === c.slug ? (
+            <span key={c.slug} aria-current="page" className={activeChipClassName}>
+              {`${c.label} (${count})`}
+            </span>
+          ) : (
+            <Link
+              key={c.slug}
+              href={`/categories/${c.slug}`}
+              aria-label={`查看分類 ${c.label} 的文章`}
+              className={chipClassName}
+            >
+              {`${c.label} (${count})`}
+            </Link>
+          )
+        })}
+      </div>
+
+      <h4 className="mb-2 mt-4 px-0.5 text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">
+        標籤
+      </h4>
+      <div className={scrollRowClassName}>
+        {visibleTags.map((t) => {
+          return activeTagSlug === slug(t) ? (
+            <span key={t} aria-current="page" className={activeChipClassName}>
+              {`${t} (${tagCounts[t]})`}
+            </span>
+          ) : (
+            <Link
+              key={t}
+              href={`/tags/${slug(t)}`}
+              aria-label={`View posts tagged ${t}`}
+              className={chipClassName}
+            >
+              {`${t} (${tagCounts[t]})`}
+            </Link>
+          )
+        })}
+        <Link
+          href="/tags"
+          className="inline-flex shrink-0 items-center rounded-full border border-dashed border-gray-300 px-3 py-1.5 text-xs font-medium text-gray-500 transition-colors hover:border-primary-500 hover:text-primary-500 dark:border-gray-600 dark:text-gray-400 dark:hover:border-primary-400 dark:hover:text-primary-400"
+        >
+          全部標籤 →
+        </Link>
+      </div>
+    </div>
+  )
+
   return (
     <>
       <div>
         <div className="pb-6 pt-6">
-          <h1 className="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:hidden sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
+          <h1 className="text-2xl font-extrabold tracking-wide text-gray-900 dark:text-gray-100 sm:text-2xl md:text-4xl lg:hidden">
             {title}
           </h1>
         </div>
-        <div className="flex sm:space-x-24">
-          <div className="hidden h-full max-h-screen min-w-[280px] max-w-[280px] flex-wrap overflow-auto rounded bg-gray-50 pt-5 shadow-md dark:bg-gray-900/70 dark:shadow-gray-800/40 sm:flex">
-            <div className="px-6 py-4">
-              {pathname.startsWith('/posts') ? (
-                <h3 className="font-bold uppercase text-primary-500">全部文章</h3>
-              ) : (
-                <Link
-                  href={`/posts`}
-                  className="font-bold uppercase text-gray-700 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-500"
-                >
-                  全部文章
-                </Link>
-              )}
-
-              <h4 className="mt-6 text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">
-                類別
-              </h4>
-              <ul>
-                {categoryConfig.map((c) => {
-                  const count = categoryCounts[c.slug] ?? 0
-                  return (
-                    <li key={c.slug} className="my-3">
-                      {activeCategorySlug === c.slug ? (
-                        <h3 className="inline px-3 py-2 text-sm font-bold uppercase text-primary-500">
-                          {`${c.label} (${count})`}
-                        </h3>
-                      ) : (
-                        <Link
-                          href={`/categories/${c.slug}`}
-                          className="px-3 py-2 text-sm font-medium uppercase text-gray-500 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-500"
-                          aria-label={`查看分類 ${c.label} 的文章`}
-                        >
-                          {`${c.label} (${count})`}
-                        </Link>
-                      )}
-                    </li>
-                  )
-                })}
-              </ul>
-
-              <h4 className="mt-6 text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">
-                標籤
-              </h4>
-              <ul>
-                {visibleTags.map((t) => {
-                  return (
-                    <li key={t} className="my-3">
-                      {activeTagSlug === slug(t) ? (
-                        <h3 className="inline px-3 py-2 text-sm font-bold uppercase text-primary-500">
-                          {`${t} (${tagCounts[t]})`}
-                        </h3>
-                      ) : (
-                        <Link
-                          href={`/tags/${slug(t)}`}
-                          className="px-3 py-2 text-sm font-medium uppercase text-gray-500 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-500"
-                          aria-label={`View posts tagged ${t}`}
-                        >
-                          {`${t} (${tagCounts[t]})`}
-                        </Link>
-                      )}
-                    </li>
-                  )
-                })}
-              </ul>
-              <Link
-                href="/tags"
-                className="mt-3 inline-block px-3 py-2 text-sm font-medium uppercase text-gray-500 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-500"
-              >
-                查看全部標籤
-              </Link>
-            </div>
+        {mobileFilters}
+        <div className="flex lg:gap-x-12 xl:gap-x-24">
+          <div className="hidden h-full max-h-screen min-w-[280px] max-w-[280px] flex-wrap overflow-auto rounded bg-gray-50 pt-5 shadow-md dark:bg-gray-900/70 dark:shadow-gray-800/40 lg:flex">
+            {filters}
           </div>
-          <div>
+          <div className="min-w-0 flex-1">
             <ul>
               {displayPosts.map((post) => {
                 const { path, date, title, summary, tags, category } = post
@@ -213,13 +312,17 @@ export default function ListLayoutWithTags({
                       <div className="space-y-3">
                         <div>
                           <h2 className="text-2xl font-bold leading-8 tracking-wide">
-                            <Link href={`/${path}`} className="text-gray-900 dark:text-gray-100">
+                            <Link
+                              href={`/${path}`}
+                              className="text-gray-900 transition-colors hover:text-gray-600 dark:text-gray-100 dark:hover:text-gray-300"
+                            >
                               {title}
                             </Link>
                           </h2>
                           <div className="flex flex-wrap">
                             {tags
-                              ?.sort((a, b) => a.localeCompare(b))
+                              ?.slice()
+                              .sort((a, b) => a.localeCompare(b))
                               .map((tag) => {
                                 return <Tag key={tag} text={tag} />
                               })}
