@@ -10,6 +10,7 @@ import SectionContainer from '@/components/SectionContainer'
 import Footer from '@/components/Footer'
 import siteMetadata from '@/data/siteMetadata'
 import { ThemeProviders } from './theme-providers'
+import { socialBannerImage } from './seo'
 import { Metadata } from 'next'
 
 const space_grotesk = Space_Grotesk({
@@ -21,16 +22,16 @@ const space_grotesk = Space_Grotesk({
 export const metadata: Metadata = {
   metadataBase: new URL(siteMetadata.siteUrl),
   title: {
-    default: siteMetadata.title,
+    default: siteMetadata.seo.defaultTitle,
     template: `%s | ${siteMetadata.title}`,
   },
   description: siteMetadata.description,
   openGraph: {
-    title: siteMetadata.title,
+    title: siteMetadata.seo.defaultTitle,
     description: siteMetadata.description,
     url: './',
     siteName: siteMetadata.title,
-    images: [siteMetadata.socialBanner],
+    images: [socialBannerImage],
     locale: 'zh_TW',
     type: 'website',
   },
@@ -52,9 +53,9 @@ export const metadata: Metadata = {
     },
   },
   twitter: {
-    title: siteMetadata.title,
+    title: siteMetadata.seo.defaultTitle,
     card: 'summary_large_image',
-    images: [siteMetadata.socialBanner],
+    images: [socialBannerImage],
   },
   verification: {
     google: 'bUluD2rAEOQMmpI9K8E-kmtsXUnfzm4ZvyE4DV8AHEw',
@@ -75,6 +76,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         sizes="76x76"
         href={`${basePath}/static/favicons/apple-touch-icon.png`}
       />
+      {/* Google Search only uses favicons whose size is a multiple of 48px. */}
+      <link
+        rel="icon"
+        type="image/png"
+        sizes="96x96"
+        href={`${basePath}/static/favicons/android-chrome-96x96.png`}
+      />
       <link
         rel="icon"
         type="image/png"
@@ -91,9 +99,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <link
         rel="mask-icon"
         href={`${basePath}/static/favicons/safari-pinned-tab.svg`}
-        color="#5bbad5"
+        color="#ff5a1f"
       />
-      <meta name="msapplication-TileColor" content="#000000" />
+      <meta name="msapplication-TileColor" content="#ff5a1f" />
       <meta name="theme-color" media="(prefers-color-scheme: light)" content="#fff" />
       <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000" />
       <link rel="alternate" type="application/rss+xml" href={`${basePath}/feed.xml`} />

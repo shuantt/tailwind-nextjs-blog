@@ -5,6 +5,16 @@ const siteMetadata = {
   headerTitle: 'SHUANTT',
   headerTagline: 'DEV & DESIGN BY SHUAN TSENG',
   description: '關於職涯、生活、個人創作、專案，以及軟體與產品使用經驗的記錄。',
+  // SEO copy shared by app/layout.tsx and app/page.tsx. `title` stays the brand suffix used
+  // by the `%s | SHUANTT` template; `defaultTitle` is the full homepage title that carries
+  // the descriptive keywords.
+  seo: {
+    defaultTitle: 'SHUANTT｜Shuan Tseng 的開發、設計與生活部落格',
+    // Google picks the site name shown above results from WebSite JSON-LD name/alternateName.
+    alternateName: 'Shuan Tseng 的部落格',
+    postsDescription:
+      'Shuan Tseng 的全部文章，涵蓋產品開發、學習成長與生活紀錄三個分類，依發布日期排序。',
+  },
   language: 'zh-TW',
   theme: 'system', // initial load follows OS preference; switch button only offers light/dark
   siteUrl: 'https://blog.shuantt.com',

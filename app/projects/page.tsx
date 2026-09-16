@@ -2,7 +2,10 @@ import Card from '@/components/Card'
 import projectsData from '@/data/projectsData'
 import { genPageMetadata } from 'app/seo'
 
-export const metadata = genPageMetadata({ title: 'Projects' })
+export const metadata = genPageMetadata({
+  title: '作品集 Projects',
+  description: 'Shuan Tseng 的作品集，收錄開發專案與各類創作，附技術說明與 Demo 連結。',
+})
 
 export default function Projects() {
   return (

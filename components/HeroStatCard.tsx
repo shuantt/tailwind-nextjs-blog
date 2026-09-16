@@ -8,7 +8,11 @@ import heroContent, { type TitleChipContent } from '@/data/heroContent'
 import { INTRO_CONTENT_DELAY_MS } from '@/lib/introRevealTiming'
 
 const NAME = siteMetadata.author.toUpperCase()
-const AVATAR_SRC = '/static/images/avatar-animated-v4.gif'
+// Animated WebP re-encoded from the original GIF at 544px: the card renders it at 128px
+// and 272px CSS (so 544px covers 2x displays), and the file is ~240 KB instead of 3.4 MB.
+// This is the homepage LCP element, so its byte size matters more than anywhere else.
+const AVATAR_SRC = '/static/images/avatar-animated-v4.webp'
+const AVATAR_PX = 544
 
 type TitleDef = TitleChipContent
 
@@ -365,8 +369,8 @@ function Avatar({
       <Image
         src={AVATAR_SRC}
         alt={siteMetadata.author}
-        width={600}
-        height={600}
+        width={AVATAR_PX}
+        height={AVATAR_PX}
         priority
         unoptimized
         sizes={imageSizes}

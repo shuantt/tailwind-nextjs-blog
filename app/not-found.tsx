@@ -1,4 +1,9 @@
 import Link from '@/components/Link'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: '找不到頁面',
+}
 
 export default function NotFound() {
   return (
