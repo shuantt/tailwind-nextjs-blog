@@ -37,7 +37,7 @@ export default function PostLayout({
   related = [],
   children,
 }: LayoutProps) {
-  const { path, slug, date, title, tags, category } = content
+  const { path, slug, date, title, tags, category, readingTime } = content
   const basePath = path.split('/')[0]
   const categoryItem = categoryConfig.find((c) => c.label === category)
 
@@ -66,6 +66,12 @@ export default function PostLayout({
                     <time dateTime={date}>
                       {new Date(date).toLocaleDateString(siteMetadata.locale, postDateTemplate)}
                     </time>
+                    {readingTime?.text && (
+                      <>
+                        <span aria-hidden="true">·</span>
+                        <span>{readingTime.text}</span>
+                      </>
+                    )}
                   </dd>
                 </div>
               </dl>

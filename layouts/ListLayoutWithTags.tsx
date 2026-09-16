@@ -295,7 +295,7 @@ export default function ListLayoutWithTags({
             )}
             <ul>
               {displayPosts.map((post) => {
-                const { path, date, title, summary, tags, category } = post
+                const { path, date, title, summary, tags, category, readingTime } = post
                 const categoryItem = categoryConfig.find((c) => c.label === category)
                 return (
                   <li key={path} className="py-5">
@@ -317,6 +317,12 @@ export default function ListLayoutWithTags({
                           <time dateTime={date} suppressHydrationWarning>
                             {formatDate(date, siteMetadata.locale)}
                           </time>
+                          {readingTime?.text && (
+                            <>
+                              <span aria-hidden="true">·</span>
+                              <span>{readingTime.text}</span>
+                            </>
+                          )}
                         </dd>
                       </dl>
                       <div className="space-y-3">

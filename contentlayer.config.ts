@@ -1,6 +1,6 @@
 import { defineDocumentType, ComputedFields, makeSource } from 'contentlayer2/source-files'
 import { writeFileSync } from 'fs'
-import readingTime from 'reading-time'
+import { estimateReadingTime } from './lib/readingTime'
 import { slug } from 'github-slugger'
 import path from 'path'
 import { fromHtmlIsomorphic } from 'hast-util-from-html-isomorphic'
@@ -41,7 +41,9 @@ const icon = fromHtmlIsomorphic(
 )
 
 const computedFields: ComputedFields = {
-  readingTime: { type: 'json', resolve: (doc) => readingTime(doc.body.raw) },
+  // `reading-time` (the npm package this replaced) assumes English prose and badly
+  // over-estimates zh-TW content — see lib/readingTime.ts for why.
+  readingTime: { type: 'json', resolve: (doc) => estimateReadingTime(doc.body.raw) },
   slug: {
     type: 'string',
     resolve: (doc) => doc._raw.flattenedPath.replace(/^.+?(\/)/, ''),

@@ -50,7 +50,7 @@ export default function Home({ posts }: HomeProps) {
         >
           {!posts.length && 'No posts found.'}
           {posts.slice(0, MAX_DISPLAY).map((post, index) => {
-            const { slug, date, title, summary, tags, category } = post
+            const { slug, date, title, summary, tags, category, readingTime } = post
             const categoryItem = categoryConfig.find((c) => c.label === category)
             return (
               <li
@@ -75,6 +75,12 @@ export default function Home({ posts }: HomeProps) {
                           </>
                         )}
                         <time dateTime={date}>{formatDate(date, siteMetadata.locale)}</time>
+                        {readingTime?.text && (
+                          <>
+                            <span aria-hidden="true">·</span>
+                            <span>{readingTime.text}</span>
+                          </>
+                        )}
                       </dd>
                     </dl>
                     <div className="space-y-5 xl:col-span-3">
