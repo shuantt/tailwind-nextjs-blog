@@ -10,6 +10,8 @@ import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
 import ScrollTopAndComment from '@/components/ScrollTopAndComment'
 import TOCInline from 'pliny/ui/TOCInline'
+import { formatDate } from 'pliny/utils/formatDate'
+import { categoryConfig } from '@/data/categoryData'
 
 const postDateTemplate: Intl.DateTimeFormatOptions = {
   weekday: 'long',
@@ -23,12 +25,21 @@ interface LayoutProps {
   authorDetails: CoreContent<Authors>[]
   next?: { path: string; title: string }
   prev?: { path: string; title: string }
+  related?: CoreContent<Blog>[]
   children: ReactNode
 }
 
-export default function PostLayout({ content, authorDetails, next, prev, children }: LayoutProps) {
-  const { path, slug, date, title, tags } = content
+export default function PostLayout({
+  content,
+  authorDetails,
+  next,
+  prev,
+  related = [],
+  children,
+}: LayoutProps) {
+  const { path, slug, date, title, tags, category } = content
   const basePath = path.split('/')[0]
+  const categoryItem = categoryConfig.find((c) => c.label === category)
 
   return (
     <SectionContainer>
@@ -40,7 +51,18 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
               <dl className="space-y-10">
                 <div>
                   <dt className="sr-only">Published on</dt>
-                  <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
+                  <dd className="flex flex-wrap items-center justify-center gap-x-2 text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
+                    {categoryItem && (
+                      <>
+                        <Link
+                          href={`/categories/${categoryItem.slug}`}
+                          className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+                        >
+                          {categoryItem.label}
+                        </Link>
+                        <span aria-hidden="true">·</span>
+                      </>
+                    )}
                     <time dateTime={date}>
                       {new Date(date).toLocaleDateString(siteMetadata.locale, postDateTemplate)}
                     </time>
@@ -149,6 +171,37 @@ export default function PostLayout({ content, authorDetails, next, prev, childre
                 <div className="prose max-w-none border-b border-gray-200 pb-8 pt-10 dark:prose-invert dark:border-gray-700 xl:border-b-0">
                   {children}
                 </div>
+                {related.length > 0 && (
+                  <section
+                    aria-labelledby="related-posts"
+                    className="border-b border-gray-200 py-8 dark:border-gray-700 xl:border-b-0"
+                  >
+                    <h2
+                      id="related-posts"
+                      className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400"
+                    >
+                      Related Posts
+                    </h2>
+                    <ul className="mt-4 space-y-3">
+                      {related.map((item) => (
+                        <li key={item.slug} className="flex flex-wrap items-baseline gap-x-3">
+                          <Link
+                            href={`/${item.path}`}
+                            className="font-medium text-gray-900 hover:text-primary-500 dark:text-gray-100 dark:hover:text-primary-400"
+                          >
+                            {item.title}
+                          </Link>
+                          <time
+                            dateTime={item.date}
+                            className="text-sm text-gray-500 dark:text-gray-400"
+                          >
+                            {formatDate(item.date, siteMetadata.locale)}
+                          </time>
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
+                )}
               </div>
 
               <aside className="order-3 hidden pb-8 pt-10 lg:sticky lg:top-32 lg:col-start-2 lg:row-start-2 lg:block lg:self-start xl:col-start-3 xl:row-start-1">

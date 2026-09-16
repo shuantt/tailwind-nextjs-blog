@@ -22,6 +22,7 @@ interface ListLayoutProps {
   title: string
   initialDisplayPosts?: CoreContent<Blog>[]
   pagination?: PaginationProps
+  description?: string
 }
 
 function Pagination({ totalPages, currentPage }: PaginationProps) {
@@ -40,7 +41,7 @@ function Pagination({ totalPages, currentPage }: PaginationProps) {
         )}
         {prevPage && (
           <Link
-            href={currentPage - 1 === 1 ? `/${basePath}/` : `/${basePath}/page/${currentPage - 1}`}
+            href={currentPage - 1 === 1 ? `/${basePath}` : `/${basePath}/page/${currentPage - 1}`}
             rel="prev"
           >
             Previous
@@ -69,6 +70,7 @@ export default function ListLayoutWithTags({
   title,
   initialDisplayPosts = [],
   pagination,
+  description,
 }: ListLayoutProps) {
   const pathname = usePathname()
   const tagCounts = tagData as Record<string, number>
@@ -276,6 +278,11 @@ export default function ListLayoutWithTags({
           <h1 className="text-2xl font-extrabold tracking-wide text-gray-900 dark:text-gray-100 sm:text-2xl md:text-4xl lg:hidden">
             {title}
           </h1>
+          {description && (
+            <p className="mt-2 text-base leading-7 text-gray-500 dark:text-gray-400 lg:mt-0">
+              {description}
+            </p>
+          )}
         </div>
         {mobileFilters}
         <div className="flex lg:gap-x-12 xl:gap-x-24">
@@ -283,6 +290,9 @@ export default function ListLayoutWithTags({
             {filters}
           </div>
           <div className="min-w-0 flex-1">
+            {displayPosts.length === 0 && (
+              <p className="py-5 text-base text-gray-500 dark:text-gray-400">目前還沒有文章。</p>
+            )}
             <ul>
               {displayPosts.map((post) => {
                 const { path, date, title, summary, tags, category } = post

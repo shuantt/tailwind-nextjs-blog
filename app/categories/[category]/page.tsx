@@ -1,7 +1,6 @@
 import { allCoreContent, sortPosts } from 'pliny/utils/contentlayer'
-import siteMetadata from '@/data/siteMetadata'
 import { categoryConfig } from '@/data/categoryData'
-import { publishedBlogs } from '@/lib/content'
+import { postsInCategory } from '@/lib/content'
 import ListLayout from '@/layouts/ListLayoutWithTags'
 import { genPageMetadata } from 'app/seo'
 import { Metadata } from 'next'
@@ -13,13 +12,18 @@ export async function generateMetadata(props: {
   const params = await props.params
   const categorySlug = decodeURI(params.category)
   const categoryItem = categoryConfig.find((c) => c.slug === categorySlug)
-  const title = categoryItem?.label ?? categorySlug
+  if (!categoryItem) {
+    return {}
+  }
+  const hasPosts = postsInCategory(categoryItem.label).length > 0
   return genPageMetadata({
-    title,
-    description: `${siteMetadata.title} ${title} 分類文章`,
+    title: `分類：${categoryItem.label}`,
+    description: categoryItem.description,
     alternates: {
-      canonical: `/categories/${categoryItem?.slug ?? categorySlug}`,
+      canonical: `/categories/${categoryItem.slug}`,
     },
+    // A fixed category with no posts yet is a real page, but not worth a search result.
+    ...(hasPosts ? {} : { robots: { index: false, follow: true } }),
   })
 }
 
@@ -36,11 +40,14 @@ export default async function CategoryPage(props: { params: Promise<{ category: 
   if (!categoryItem) {
     return notFound()
   }
-  const filteredPosts = allCoreContent(
-    sortPosts(publishedBlogs.filter((post) => post.category === categoryItem.label))
+  // Categories are a fixed taxonomy, so an empty one renders an empty state instead of a
+  // 404: the sidebar and sitemap can rely on the page existing.
+  const filteredPosts = allCoreContent(sortPosts(postsInCategory(categoryItem.label)))
+  return (
+    <ListLayout
+      posts={filteredPosts}
+      title={categoryItem.label}
+      description={categoryItem.description}
+    />
   )
-  if (filteredPosts.length === 0) {
-    return notFound()
-  }
-  return <ListLayout posts={filteredPosts} title={categoryItem.label} />
 }

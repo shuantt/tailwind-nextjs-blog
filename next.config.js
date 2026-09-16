@@ -97,6 +97,25 @@ module.exports = () => {
         headers: securityHeaders,
       },
     ]
+
+    config.redirects = async () => [
+      {
+        source: '/posts/dev/new-nextjs-blog',
+        destination: '/posts/new-nextjs-blog',
+        permanent: true,
+      },
+      {
+        source: '/posts/life/after-launching-hexo-blog',
+        destination: '/posts/after-launching-hexo-blog',
+        permanent: true,
+      },
+      // Page 1 of the paginated list is /posts itself; keep one canonical URL for it.
+      {
+        source: '/posts/page/1',
+        destination: '/posts',
+        permanent: true,
+      },
+    ]
   }
 
   return plugins.reduce((acc, next) => next(acc), config)

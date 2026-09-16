@@ -143,16 +143,21 @@ export const Blog = defineDocumentType(() => ({
     ...computedFields,
     structuredData: {
       type: 'json',
-      resolve: (doc) => ({
-        '@context': 'https://schema.org',
-        '@type': 'BlogPosting',
-        headline: doc.title,
-        datePublished: doc.date,
-        dateModified: doc.lastmod || doc.date,
-        description: doc.summary,
-        image: doc.images ? doc.images[0] : siteMetadata.socialBanner,
-        url: `${siteMetadata.siteUrl}/${doc._raw.flattenedPath}`,
-      }),
+      resolve: (doc) => {
+        const firstImage = Array.isArray(doc.images) ? doc.images[0] : doc.images
+        const image = typeof firstImage === 'string' ? firstImage : siteMetadata.socialBanner
+        return {
+          '@context': 'https://schema.org',
+          '@type': 'BlogPosting',
+          headline: doc.title,
+          datePublished: doc.date,
+          dateModified: doc.lastmod || doc.date,
+          description: doc.summary,
+          // Structured data needs absolute URLs; frontmatter images are root-relative.
+          image: image.startsWith('http') ? image : `${siteMetadata.siteUrl}${image}`,
+          url: `${siteMetadata.siteUrl}/${doc._raw.flattenedPath}`,
+        }
+      },
     },
   },
 }))
@@ -170,6 +175,8 @@ export const Authors = defineDocumentType(() => ({
     twitter: { type: 'string' },
     bluesky: { type: 'string' },
     linkedin: { type: 'string' },
+    facebook: { type: 'string' },
+    instagram: { type: 'string' },
     github: { type: 'string' },
     layout: { type: 'string' },
   },

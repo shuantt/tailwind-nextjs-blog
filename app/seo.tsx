@@ -9,7 +9,16 @@ interface PageSEOProps {
   [key: string]: any
 }
 
+// Dimensions and alt text let social crawlers lay the card out before fetching the image.
+export const socialBannerImage = {
+  url: siteMetadata.socialBanner,
+  width: 1200,
+  height: 600,
+  alt: siteMetadata.title,
+}
+
 export function genPageMetadata({ title, description, image, ...rest }: PageSEOProps): Metadata {
+  const images = image ? [image] : [socialBannerImage]
   return {
     title,
     description: description || siteMetadata.description,
@@ -18,14 +27,14 @@ export function genPageMetadata({ title, description, image, ...rest }: PageSEOP
       description: description || siteMetadata.description,
       url: './',
       siteName: siteMetadata.title,
-      images: image ? [image] : [siteMetadata.socialBanner],
+      images,
       locale: 'zh_TW',
       type: 'website',
     },
     twitter: {
       title: `${title} | ${siteMetadata.title}`,
       card: 'summary_large_image',
-      images: image ? [image] : [siteMetadata.socialBanner],
+      images,
     },
     ...rest,
   }
