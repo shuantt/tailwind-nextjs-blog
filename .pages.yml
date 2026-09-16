@@ -55,6 +55,12 @@ content:
         required: true
         options:
           format: yyyy-MM-dd
+      - name: lastmod
+        label: 最後更新日期
+        type: date
+        description: 修改已發布的文章時填今天的日期；搜尋引擎與 sitemap 會用它判斷更新時間，新文章留空即可。
+        options:
+          format: yyyy-MM-dd
       - name: authors
         label: 作者
         type: select
