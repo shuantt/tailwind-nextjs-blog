@@ -45,7 +45,7 @@ Cursor 等）的**唯一規範來源**。`AGENTS.md` 只負責把讀者導向這
 3. 可執行的設定與現行程式碼：`package.json`、`next.config.js`、`contentlayer.config.ts`、
    `scripts/validate-content.mjs`、`.pages.yml`、`app/`。
 4. `faq/` 內的本地說明文件。
-5. `README.md`。它仍大量保留上游模板內容，對本站可能已過時，只在需要上游背景時參考。
+5. `README.md`。提供本站介紹、部落格導覽、個人改動與上游來源；詳細維護規範以本檔與現行實作為準。
 
 ## 3. Repository 地圖
 
