@@ -7,6 +7,7 @@ import siteMetadata from '@/data/siteMetadata'
 import heroContent, { type TitleChipContent } from '@/data/heroContent'
 import { INTRO_CONTENT_DELAY_MS } from '@/lib/introRevealTiming'
 import { getHeroStats, type HeroStats } from '@/lib/heroStats'
+import { resolveHeroItems, type HeroListItem } from '@/lib/heroItems'
 
 const NAME = siteMetadata.author.toUpperCase()
 // Animated WebP re-encoded from the original GIF at 544px: the card renders it at 128px
@@ -98,6 +99,17 @@ export default function HeroStatCard({
 }: HeroStatCardProps) {
   const [tab, setTab] = useState<'bio' | 'status' | 'quests'>('bio')
   const [liveStats, setLiveStats] = useState(initialStats)
+  const itemValues = {
+    postsCount,
+    projectsCount,
+    race: {
+      currentWeek: raceCurrentWeek,
+      totalWeeks: raceTotalWeeks,
+      progressPct: raceProgressPct,
+    },
+  }
+  const statusItems = resolveHeroItems(heroContent.statusItems, itemValues)
+  const questItems = resolveHeroItems(heroContent.quests, itemValues)
 
   useEffect(() => {
     // Keep the first render identical to the server, then refresh even a cached homepage.
@@ -194,25 +206,23 @@ export default function HeroStatCard({
           <TabButton active={tab === 'bio'} onClick={() => setTab('bio')}>
             {heroContent.tabs.bio}
           </TabButton>
-          <TabButton active={tab === 'status'} onClick={() => setTab('status')}>
-            {heroContent.tabs.stats}
-          </TabButton>
-          <TabButton active={tab === 'quests'} onClick={() => setTab('quests')}>
-            {heroContent.tabs.quests}
-          </TabButton>
+          {statusItems.length > 0 && (
+            <TabButton active={tab === 'status'} onClick={() => setTab('status')}>
+              {heroContent.tabs.stats}
+            </TabButton>
+          )}
+          {questItems.length > 0 && (
+            <TabButton active={tab === 'quests'} onClick={() => setTab('quests')}>
+              {heroContent.tabs.quests}
+            </TabButton>
+          )}
         </div>
         <div className="pt-4">
           {tab === 'bio' && (
             <p className="text-xs leading-7 text-gray-800 dark:text-gray-200">{bio}</p>
           )}
-          {tab === 'status' && <StatusList postsCount={postsCount} projectsCount={projectsCount} />}
-          {tab === 'quests' && (
-            <QuestList
-              raceCurrentWeek={raceCurrentWeek}
-              raceTotalWeeks={raceTotalWeeks}
-              raceProgressPct={raceProgressPct}
-            />
-          )}
+          {tab === 'status' && <StatusList items={statusItems} />}
+          {tab === 'quests' && <QuestList items={questItems} />}
         </div>
       </div>
 
@@ -258,19 +268,19 @@ export default function HeroStatCard({
             <p className="text-sm leading-7 text-gray-800 dark:text-gray-200">{bio}</p>
           </div>
 
-          <div className="border-t border-dashed border-gray-200 pt-5 dark:border-gray-700">
-            <SectionLabel weight="normal">{heroContent.sectionLabels.stats}</SectionLabel>
-            <StatusList postsCount={postsCount} projectsCount={projectsCount} />
-          </div>
+          {statusItems.length > 0 && (
+            <div className="border-t border-dashed border-gray-200 pt-5 dark:border-gray-700">
+              <SectionLabel weight="normal">{heroContent.sectionLabels.stats}</SectionLabel>
+              <StatusList items={statusItems} />
+            </div>
+          )}
 
-          <div className="border-t border-dashed border-gray-200 pt-5 dark:border-gray-700">
-            <SectionLabel>{heroContent.sectionLabels.quest}</SectionLabel>
-            <QuestList
-              raceCurrentWeek={raceCurrentWeek}
-              raceTotalWeeks={raceTotalWeeks}
-              raceProgressPct={raceProgressPct}
-            />
-          </div>
+          {questItems.length > 0 && (
+            <div className="border-t border-dashed border-gray-200 pt-5 dark:border-gray-700">
+              <SectionLabel>{heroContent.sectionLabels.quest}</SectionLabel>
+              <QuestList items={questItems} />
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -562,68 +572,45 @@ function TitleChip({ label, hint, compact }: TitleDef & { compact?: boolean }) {
 // stats (posts/projects) with a real running level, so the section is
 // labeled the more generic "Status" instead (see the STATUS tab / heading
 // above and the section label on desktop).
-interface StatusListProps {
-  postsCount: number
-  projectsCount: number
+interface HeroListProps {
+  items: HeroListItem[]
 }
 
-function StatusList({ postsCount, projectsCount }: StatusListProps) {
+function StatusList({ items }: HeroListProps) {
   // The count itself is the "value" (kept orange); the unit character
   // (篇/個) is just grammar, so it stays a neutral gray instead.
-  const items: { name: string; value: string; unit?: string }[] = [
-    {
-      name: heroContent.statusItems.posts.name,
-      value: String(postsCount),
-      unit: heroContent.statusItems.posts.unit,
-    },
-    {
-      name: heroContent.statusItems.projects.name,
-      value: String(projectsCount),
-      unit: heroContent.statusItems.projects.unit,
-    },
-    {
-      name: heroContent.statusItems.runningLevel.name,
-      value: heroContent.statusItems.runningLevel.value,
-    },
-  ]
-
   return (
     <div className="flex flex-col">
-      {items.map((item) => (
-        <div
-          key={item.name}
-          // No gap between rows (the row itself supplies spacing via py) — a
-          // flex `gap` here would leave an unfilled seam between rows that
-          // hover:bg can't reach, since the gap sits outside each row's own
-          // box (looked like a layout bug rather than a hover effect).
-          className="-mx-2 flex cursor-default items-center justify-between border-b border-dashed border-gray-200 px-2 py-2 transition-colors duration-150 last:border-b-0 hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-white/10"
-        >
-          <span className="text-xs font-normal text-gray-800 dark:text-gray-200 sm:text-sm">
-            {item.name}
-          </span>
-          <span className="font-mono text-xs font-normal sm:text-sm">
-            <span className="text-primary-400">{item.value}</span>
-            {item.unit && (
-              <span className="ml-0.5 text-gray-500 dark:text-gray-400">{item.unit}</span>
-            )}
-          </span>
-        </div>
-      ))}
+      {items.map((item, index) =>
+        item.progressPct !== undefined ? (
+          <QuestRow key={item.key} item={item} first={index === 0} />
+        ) : (
+          <div
+            key={item.key}
+            // No gap between rows (the row itself supplies spacing via py) — a
+            // flex `gap` here would leave an unfilled seam between rows that
+            // hover:bg can't reach, since the gap sits outside each row's own
+            // box (looked like a layout bug rather than a hover effect).
+            className="-mx-2 flex cursor-default items-center justify-between border-b border-dashed border-gray-200 px-2 py-2 transition-colors duration-150 last:border-b-0 hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-white/10"
+          >
+            <span className="text-xs font-normal text-gray-800 dark:text-gray-200 sm:text-sm">
+              {item.name}
+            </span>
+            <span className="font-mono text-xs font-normal sm:text-sm">
+              <span className="text-primary-400">{item.value}</span>
+              {item.unit && (
+                <span className="ml-0.5 text-gray-500 dark:text-gray-400">{item.unit}</span>
+              )}
+            </span>
+          </div>
+        )
+      )}
     </div>
   )
 }
 
-interface QuestListProps {
-  raceCurrentWeek: number
-  raceTotalWeeks: number
-  raceProgressPct: number
-}
-
-// Only one real quest exists right now — the marathon countdown. (Posts/
-// projects counts live in the Status section instead; see StatusList.) The
-// name is a fixed "N-week training block" label; only the current-week
-// fraction and the bar move, both derived from today's date vs. race day.
-function QuestList({ raceCurrentWeek, raceTotalWeeks, raceProgressPct }: QuestListProps) {
+function QuestList({ items }: HeroListProps) {
+  if (items.length === 0) return null
   return (
     // Hover lives on this outer card, not the row inside it — with only one
     // row today, hovering anywhere in the visible pill should fill exactly
@@ -631,27 +618,18 @@ function QuestList({ raceCurrentWeek, raceTotalWeeks, raceProgressPct }: QuestLi
     // the row's own text+padding (which read as not tracking the card's
     // outline at all).
     <div className="cursor-default rounded-2xl border border-gray-200 bg-gray-50 px-4 transition-colors duration-150 hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800/60 dark:hover:bg-white/10">
-      <QuestRow
-        name={`${heroContent.quest.namePrefix}${raceTotalWeeks}${heroContent.quest.nameSuffix}`}
-        progressPct={raceProgressPct}
-        valueLabel={`${raceCurrentWeek}/${raceTotalWeeks}`}
-        first
-      />
+      {items.map((item, index) => (
+        <QuestRow key={item.key} item={item} first={index === 0} />
+      ))}
     </div>
   )
 }
 
 function QuestRow({
-  name,
-  progressPct,
-  valueLabel,
-  countLabel,
+  item: { name, progressPct, value, unit },
   first,
 }: {
-  name: string
-  progressPct?: number
-  valueLabel?: string
-  countLabel?: string
+  item: HeroListItem
   first?: boolean
 }) {
   return (
@@ -665,19 +643,28 @@ function QuestRow({
       </span>
       {progressPct !== undefined ? (
         <>
-          <div className="h-1.5 w-20 shrink-0 overflow-hidden rounded-full border border-gray-200 bg-gray-100 dark:border-gray-700 dark:bg-gray-800">
+          <div
+            role="progressbar"
+            aria-label={name}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={progressPct}
+            className="h-1.5 w-20 shrink-0 overflow-hidden rounded-full border border-gray-200 bg-gray-100 dark:border-gray-700 dark:bg-gray-800"
+          >
             <div
               className="h-full rounded-full bg-gradient-to-r from-primary-500 to-primary-400"
               style={{ width: `${progressPct}%` }}
             />
           </div>
-          <span className="w-12 shrink-0 text-right font-mono text-xs font-normal text-gray-500 dark:text-gray-400 sm:text-sm">
-            {valueLabel}
+          <span className="min-w-12 shrink-0 text-right font-mono text-xs font-normal text-gray-500 dark:text-gray-400 sm:text-sm">
+            {value}
+            {unit && <span className="ml-0.5">{unit}</span>}
           </span>
         </>
       ) : (
         <span className="shrink-0 font-mono text-xs font-normal text-gray-500 dark:text-gray-400 sm:text-sm">
-          {countLabel}
+          {value}
+          {unit && <span className="ml-0.5">{unit}</span>}
         </span>
       )}
     </div>

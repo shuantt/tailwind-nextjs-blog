@@ -19,10 +19,10 @@ interface PaginationProps {
 }
 interface ListLayoutProps {
   posts: CoreContent<Blog>[]
+  totalPosts: number
   title: string
   initialDisplayPosts?: CoreContent<Blog>[]
   pagination?: PaginationProps
-  description?: string
 }
 
 function Pagination({ totalPages, currentPage }: PaginationProps) {
@@ -67,13 +67,16 @@ function Pagination({ totalPages, currentPage }: PaginationProps) {
 
 export default function ListLayoutWithTags({
   posts,
+  totalPosts,
   title,
   initialDisplayPosts = [],
   pagination,
-  description,
 }: ListLayoutProps) {
   const pathname = usePathname()
-  const isPostsPage = pathname === '/posts' || pathname.startsWith('/posts/page/')
+  const isPostsPage =
+    pathname === '/posts' ||
+    pathname.startsWith('/posts/page/') ||
+    pathname.startsWith('/categories/')
   const tagCounts = tagData as Record<string, number>
   const categoryCounts = categoryData as Record<string, number>
   const tagKeys = Object.keys(tagCounts)
@@ -110,14 +113,14 @@ export default function ListLayoutWithTags({
     <nav aria-label="文章分類與標籤" className="px-6 py-4">
       {pathname.startsWith('/posts') ? (
         <Link href="/posts" aria-current="page" className="font-bold text-primary-500">
-          全部文章
+          全部文章({totalPosts})
         </Link>
       ) : (
         <Link
           href={`/posts`}
           className="font-bold uppercase text-gray-700 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-500"
         >
-          全部文章
+          全部文章({totalPosts})
         </Link>
       )}
 
@@ -209,11 +212,11 @@ export default function ListLayoutWithTags({
       <div className={scrollRowClassName}>
         {pathname.startsWith('/posts') ? (
           <span aria-current="page" className={activeChipClassName}>
-            全部文章
+            全部文章({totalPosts})
           </span>
         ) : (
           <Link href="/posts" className={chipClassName}>
-            全部文章
+            全部文章({totalPosts})
           </Link>
         )}
         {categoryConfig.map((c) => {
@@ -278,7 +281,7 @@ export default function ListLayoutWithTags({
         <div
           className={
             isPostsPage
-              ? 'flex flex-wrap items-center justify-between gap-4 pb-6 pt-6'
+              ? 'mb-6 flex flex-wrap items-center justify-between gap-4 border-b border-gray-200 pb-6 pt-6 dark:border-gray-700'
               : 'pb-6 pt-6'
           }
         >
@@ -295,11 +298,6 @@ export default function ListLayoutWithTags({
               <span className="underline underline-offset-4">查看歷年文章</span>
               <span aria-hidden="true">→</span>
             </Link>
-          )}
-          {description && (
-            <p className="mt-2 text-base leading-7 text-gray-500 dark:text-gray-400 lg:mt-0">
-              {description}
-            </p>
           )}
         </div>
         {mobileFilters}

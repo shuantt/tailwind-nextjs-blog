@@ -1,6 +1,6 @@
 import { allCoreContent, sortPosts } from 'pliny/utils/contentlayer'
 import { categoryConfig } from '@/data/categoryData'
-import { postsInCategory } from '@/lib/content'
+import { postsInCategory, publishedBlogs } from '@/lib/content'
 import ListLayout from '@/layouts/ListLayoutWithTags'
 import { genPageMetadata } from 'app/seo'
 import { Metadata } from 'next'
@@ -43,11 +43,5 @@ export default async function CategoryPage(props: { params: Promise<{ category: 
   // Categories are a fixed taxonomy, so an empty one renders an empty state instead of a
   // 404: the sidebar and sitemap can rely on the page existing.
   const filteredPosts = allCoreContent(sortPosts(postsInCategory(categoryItem.label)))
-  return (
-    <ListLayout
-      posts={filteredPosts}
-      title={categoryItem.label}
-      description={categoryItem.description}
-    />
-  )
+  return <ListLayout posts={filteredPosts} totalPosts={publishedBlogs.length} title="Posts" />
 }

@@ -3,7 +3,7 @@ import { slug } from 'github-slugger'
 export interface CategoryItem {
   label: string
   slug: string
-  // Doubles as the category page's meta description and its intro paragraph.
+  // Used as the category page's meta description.
   description: string
 }
 

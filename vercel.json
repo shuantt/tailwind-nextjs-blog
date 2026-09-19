@@ -14,11 +14,12 @@
       "buildCommand": "node build.mjs"
     }
   },
+  "redirects": [{ "source": "/sidebar/", "destination": "/sidebar", "permanent": false }],
   "rewrites": [
     { "source": "/api/v2/:path*", "destination": { "service": "artalk" } },
     { "source": "/dist/:path*", "destination": { "service": "artalk" } },
     { "source": "/sidebar/:path*", "destination": { "service": "artalk" } },
     { "source": "/comment-images/:path*", "destination": { "service": "artalk" } },
-    { "source": "/:path*", "destination": { "service": "web" } }
+    { "source": "/(.*)", "destination": { "service": "web" } }
   ]
 }

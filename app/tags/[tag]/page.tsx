@@ -1,6 +1,6 @@
 import { allCoreContent, sortPosts } from 'pliny/utils/contentlayer'
 import siteMetadata from '@/data/siteMetadata'
-import { TAG_INDEX_MIN_POSTS, postsWithTag, tagDisplayName } from '@/lib/content'
+import { TAG_INDEX_MIN_POSTS, postsWithTag, tagDisplayName, publishedBlogs } from '@/lib/content'
 import ListLayout from '@/layouts/ListLayoutWithTags'
 import tagData from 'app/tag-data.json'
 import { genPageMetadata } from 'app/seo'
@@ -43,5 +43,11 @@ export default async function TagPage(props: { params: Promise<{ tag: string }> 
   if (filteredPosts.length === 0) {
     return notFound()
   }
-  return <ListLayout posts={filteredPosts} title={tagDisplayName(tag)} />
+  return (
+    <ListLayout
+      posts={filteredPosts}
+      totalPosts={publishedBlogs.length}
+      title={tagDisplayName(tag)}
+    />
+  )
 }

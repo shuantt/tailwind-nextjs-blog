@@ -14,6 +14,84 @@ const { getHeroStats } = await import(
 )
 const at = (date) => getHeroStats(new Date(date))
 
+const itemsBundle = await build({
+  entryPoints: ['lib/heroItems.ts'],
+  bundle: true,
+  write: false,
+  platform: 'node',
+  format: 'esm',
+})
+const { resolveHeroItems } = await import(
+  `data:text/javascript;base64,${Buffer.from(itemsBundle.outputFiles[0].text).toString('base64')}`
+)
+const itemValues = {
+  postsCount: 0,
+  projectsCount: 2,
+  race: { currentWeek: 3, totalWeeks: 16, progressPct: 19 },
+}
+
+test('hero lists preserve configured order, omit hidden items, and accept custom zero values', () => {
+  const items = [
+    { key: 'runningLevel', name: '跑步等級', value: 'Lv.1' },
+    { key: 'projects', name: '作品', unit: '個', hidden: true },
+    { key: 'posts', name: '貼文', unit: '篇' },
+    { key: 'books', name: '閱讀', value: 0, unit: '本' },
+  ]
+  const original = structuredClone(items)
+  const rows = resolveHeroItems(items, itemValues)
+  assert.deepEqual(
+    rows.map(({ key, value }) => [key, value]),
+    [
+      ['runningLevel', 'Lv.1'],
+      ['posts', 0],
+      ['books', 0],
+    ]
+  )
+  assert.equal(rows[1].unit, '篇')
+  assert.deepEqual(items, original)
+  assert.deepEqual(resolveHeroItems([], itemValues), [])
+  assert.deepEqual(resolveHeroItems([{ ...items[0], hidden: true }], itemValues), [])
+})
+
+test('quests resolve training labels and allow multiple custom rows using the same format', () => {
+  const rows = resolveHeroItems(
+    [
+      { key: 'reading', name: '閱讀', value: '2/5', progressPct: 40 },
+      { key: 'raceTraining', name: '台北馬{totalWeeks}週訓練（第{currentWeek}週）' },
+      { key: 'projects', name: '專案', unit: '個' },
+      { key: 'learning', name: '學習', value: '進行中' },
+    ],
+    itemValues
+  )
+  assert.equal(rows[0].progressPct, 40)
+  assert.deepEqual(rows[1], {
+    key: 'raceTraining',
+    name: '台北馬16週訓練（第3週）',
+    value: '3/16',
+    unit: undefined,
+    progressPct: 19,
+  })
+  assert.equal(rows[2].value, 2)
+  assert.equal(rows[3].progressPct, undefined)
+})
+
+test('manual progress stays within the bar while explicit values override dynamic keys', () => {
+  const rows = resolveHeroItems(
+    [
+      { key: 'posts', name: '貼文', value: 12 },
+      { key: 'low', name: 'Low', value: 0, progressPct: -10 },
+      { key: 'high', name: 'High', value: 140, progressPct: 140 },
+      { key: 'invalid', name: 'Invalid', value: 0, progressPct: NaN },
+    ],
+    itemValues
+  )
+  assert.equal(rows[0].value, 12)
+  assert.deepEqual(
+    rows.slice(1).map(({ progressPct }) => progressPct),
+    [0, 100, 0]
+  )
+})
+
 test('coffee refills at 09:00 Taipei, drains linearly, and stays empty overnight', () => {
   for (const [time, expected] of [
     ['00:00', 0],

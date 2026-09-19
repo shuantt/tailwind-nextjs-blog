@@ -20,6 +20,20 @@ export interface StatBarContent {
   label: string
 }
 
+export type HeroDynamicItemKey = 'posts' | 'projects' | 'raceTraining'
+
+export type HeroListItemContent = {
+  /** Unique within its list; stays the same when the display name changes. */
+  key: string
+  /** Race training names may include {currentWeek} and {totalWeeks}. */
+  name: string
+  unit?: string
+  hidden?: boolean
+} & (
+  | { key: HeroDynamicItemKey; value?: never; progressPct?: never }
+  | { value: string | number; progressPct?: number }
+)
+
 export interface HeroContent {
   /** Speech-bubble heading. A literal "\n" forces a hard line break (see
    *  IntroReveal.tsx) instead of being scrambled like a normal character. */
@@ -49,19 +63,11 @@ export interface HeroContent {
   titles: TitleChipContent[]
   /** HP/MP/EXP-style stat bars, in display order. */
   stats: StatBarContent[]
-  /** Rows in the STATS section (posts count / projects count / running level). */
-  statusItems: {
-    posts: { name: string; unit: string }
-    projects: { name: string; unit: string }
-    runningLevel: { name: string; value: string }
-  }
-  /** The single QUEST row: `${namePrefix}${raceTotalWeeks}${nameSuffix}`
-   *  (e.g. "台北馬" + 16 + "週訓練" = "台北馬16週訓練"). The week numbers
-   *  themselves are computed from today's date — see lib/raceCountdown.ts. */
-  quest: {
-    namePrefix: string
-    nameSuffix: string
-  }
+  /** Both lists follow array order. Omit value for a built-in dynamic key;
+   *  provide value for a custom item, and hidden: true to temporarily hide it.
+   *  Custom progressPct values are percentages (0–100). */
+  statusItems: HeroListItemContent[]
+  quests: HeroListItemContent[]
 }
 
 const heroContent: HeroContent = {
@@ -91,15 +97,12 @@ const heroContent: HeroContent = {
     { key: 'sleep', label: 'SLEEP' },
     { key: 'exp', label: 'EXP.' },
   ],
-  statusItems: {
-    posts: { name: '貼文數', unit: '篇' },
-    projects: { name: '專案數', unit: '個' },
-    runningLevel: { name: '跑步等級', value: 'Lv.1' },
-  },
-  quest: {
-    namePrefix: '台北馬',
-    nameSuffix: '週訓練',
-  },
+  statusItems: [
+    { key: 'posts', name: '貼文數', unit: '篇' },
+    { key: 'projects', name: '專案數', unit: '個' },
+    { key: 'runningLevel', name: '跑步等級', value: 'Lv.1' },
+  ],
+  quests: [{ key: 'raceTraining', name: '台北馬{totalWeeks}週訓練' }],
 }
 
 export default heroContent

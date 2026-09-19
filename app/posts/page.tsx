@@ -20,6 +20,7 @@ export default function BlogPage() {
   return (
     <ListLayout
       posts={posts}
+      totalPosts={publishedBlogs.length}
       initialDisplayPosts={initialDisplayPosts}
       pagination={pagination}
       title="Posts"

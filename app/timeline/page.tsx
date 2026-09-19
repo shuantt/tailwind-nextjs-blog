@@ -40,19 +40,19 @@ export default function TimelinePage() {
             >
               {year}
             </h2>
-            <ul className="divide-y divide-gray-100 dark:divide-gray-800">
+            <ul>
               {posts.map((post) => (
                 <li key={post.path}>
                   <Link
                     href={`/${post.path}`}
-                    className="group grid grid-cols-[3.5rem_minmax(0,1fr)] items-baseline gap-4 rounded-sm py-3 text-gray-800 transition-colors hover:text-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-500 dark:text-gray-200 dark:hover:text-primary-400 sm:gap-6"
+                    className="group grid grid-cols-[max-content_minmax(0,1fr)] items-baseline gap-4 rounded-sm py-2 text-gray-800 transition-colors hover:text-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-500 dark:text-gray-200 dark:hover:text-primary-400 sm:gap-6"
                   >
                     <time
                       dateTime={post.date}
                       aria-label={post.date.slice(0, 10)}
                       className="whitespace-nowrap text-sm tabular-nums text-gray-500 dark:text-gray-400"
                     >
-                      {post.date.slice(5, 10).replace('-', '/')}
+                      {post.date.slice(0, 10).replaceAll('-', ' / ')}
                     </time>
                     <span className="min-w-0 break-words leading-7 group-hover:underline group-hover:underline-offset-4">
                       {post.title}
