@@ -1711,6 +1711,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@electric-sql/pglite@npm:^0.5.8":
+  version: 0.5.8
+  resolution: "@electric-sql/pglite@npm:0.5.8"
+  checksum: a4d88204c94c19303c037606612bb945c9b05dac40ead03df7ae3c7048c231c2a3a168d30707df1f874944c52681abcffcd7c92b791d15092d34379d966381ef
+  languageName: node
+  linkType: hard
+
 "@emnapi/runtime@npm:^1.7.0":
   version: 1.11.2
   resolution: "@emnapi/runtime@npm:1.11.2"
@@ -2720,6 +2727,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@neondatabase/serverless@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@neondatabase/serverless@npm:1.1.0"
+  checksum: 15fcae150fc5b1c6fb3da86a717c02587d49535b9ed1fe74b2f495c7392196a16c345a8f75e789a7637d2c1b4cda05e9a53a6c754849201888a6033af3cfcd6b
+  languageName: node
+  linkType: hard
+
 "@next/bundle-analyzer@npm:15.5.21":
   version: 15.5.21
   resolution: "@next/bundle-analyzer@npm:15.5.21"
@@ -3637,12 +3651,30 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/node@npm:*":
+  version: 26.6.1
+  resolution: "@types/node@npm:26.6.1"
+  dependencies:
+    undici-types: ~8.9.0
+  checksum: 73952ba62826a5aaec2457d429357d7be72213527a1af322596b261620b98bb6b89a602e701f4e8427d2e85587120f766fdc9f9e02d1045d7685985a12d649ac
+  languageName: node
+  linkType: hard
+
 "@types/node@npm:>=13.7.0":
   version: 22.8.5
   resolution: "@types/node@npm:22.8.5"
   dependencies:
     undici-types: ~6.19.8
   checksum: c5c3466047c2cc5f70824a89aa3873fb21abc231d7d52672ea157c01e5acbbca9831362c1d2df589f9ea10a3bdfade867ec647850d9dcf88dce7119885cb8d22
+  languageName: node
+  linkType: hard
+
+"@types/nodemailer@npm:^8.0.2":
+  version: 8.0.2
+  resolution: "@types/nodemailer@npm:8.0.2"
+  dependencies:
+    "@types/node": "*"
+  checksum: d28bf98bdf730aa01e8f3ae6a2204ab8d8fa42c0bae05d8f2076b3d1057a7eb2d28c16e9238f8310d8d3e40a53308401bf58fb0079a9a8b2448a882d18030876
   languageName: node
   linkType: hard
 
@@ -4157,6 +4189,17 @@ __metadata:
     get-intrinsic: ^1.2.6
     is-array-buffer: ^3.0.4
   checksum: b1d1fd20be4e972a3779b1569226f6740170dca10f07aa4421d42cefeec61391e79c557cda8e771f5baefe47d878178cd4438f60916ce831813c08132bced765
+  languageName: node
+  linkType: hard
+
+"artalk@npm:2.10.0":
+  version: 2.10.0
+  resolution: "artalk@npm:2.10.0"
+  dependencies:
+    marked: ^18.0.7
+  peerDependencies:
+    marked: ^18.0.7
+  checksum: 506fa26a8c9dc2934a29bb430d38c89f2c1b57e398679047efb665776104452e0d91bbe8b34977db08ea90480a92fe8b5a193f6a8fa57c5f226240a977433df3
   languageName: node
   linkType: hard
 
@@ -8350,6 +8393,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"marked@npm:^18.0.7":
+  version: 18.0.13
+  resolution: "marked@npm:18.0.13"
+  bin:
+    marked: bin/marked.js
+  checksum: 8f94f4c03916d4a392ed76ea3489cf593305ad9f1cbdbd43ac2c6a88eaf4210ac7d9347d37aba87bc11b7f5fd33ff3732cbcfc804cc51a3b8e223d8e446bed3b
+  languageName: node
+  linkType: hard
+
 "math-intrinsics@npm:^1.1.0":
   version: 1.1.0
   resolution: "math-intrinsics@npm:1.1.0"
@@ -9565,6 +9617,13 @@ __metadata:
   version: 2.0.18
   resolution: "node-releases@npm:2.0.18"
   checksum: ef55a3d853e1269a6d6279b7692cd6ff3e40bc74947945101138745bfdc9a5edabfe72cb19a31a8e45752e1910c4c65c77d931866af6357f242b172b7283f5b3
+  languageName: node
+  linkType: hard
+
+"nodemailer@npm:^10.0.10":
+  version: 10.0.10
+  resolution: "nodemailer@npm:10.0.10"
+  checksum: a6bcc09aa9b52ed0f0b7f950e807207225765f913d1484c88bd3a0b3fc15cccf704da7ef360bec9beb49cd3c25852c094ac02f745b24f00a4705e32c0d24c8fe
   languageName: node
   linkType: hard
 
@@ -12120,16 +12179,20 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "tailwind-nextjs-starter-blog@workspace:."
   dependencies:
+    "@electric-sql/pglite": ^0.5.8
     "@headlessui/react": 2.2.10
+    "@neondatabase/serverless": ^1.1.0
     "@next/bundle-analyzer": 15.5.21
     "@svgr/webpack": ^8.0.1
     "@tailwindcss/forms": ^0.5.9
     "@tailwindcss/typography": ^0.5.15
     "@types/mdx": ^2.0.12
+    "@types/nodemailer": ^8.0.2
     "@types/react": 18.3.31
     "@types/react-dom": 18.3.7
     "@typescript-eslint/eslint-plugin": ^8.12.0
     "@typescript-eslint/parser": ^8.12.0
+    artalk: 2.10.0
     autoprefixer: ^10.4.13
     body-scroll-lock: ^4.0.0-beta.0
     contentlayer2: 0.5.8
@@ -12148,6 +12211,7 @@ __metadata:
     next: 15.5.21
     next-contentlayer2: 0.5.8
     next-themes: 0.4.6
+    nodemailer: ^10.0.10
     pliny: 0.4.1
     postcss: ^8.4.24
     prettier: ^3.0.0
@@ -12571,6 +12635,13 @@ __metadata:
   version: 6.19.8
   resolution: "undici-types@npm:6.19.8"
   checksum: de51f1b447d22571cf155dfe14ff6d12c5bdaec237c765085b439c38ca8518fc360e88c70f99469162bf2e14188a7b0bcb06e1ed2dc031042b984b0bb9544017
+  languageName: node
+  linkType: hard
+
+"undici-types@npm:~8.9.0":
+  version: 8.9.0
+  resolution: "undici-types@npm:8.9.0"
+  checksum: 78c081bf592406e4bb8bbcbd6baa5c395b5998b9a6a22786e6df4bb5bc90a86aaaaa43a447b455d90589c8b5f36a5827942c20d5c7248efb66675feec1a7bb02
   languageName: node
   linkType: hard
 

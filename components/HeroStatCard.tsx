@@ -1,11 +1,12 @@
 'use client'
 
-import { useState, type ReactNode } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 import Image from '@/components/Image'
 import IntroReveal from '@/components/IntroReveal'
 import siteMetadata from '@/data/siteMetadata'
 import heroContent, { type TitleChipContent } from '@/data/heroContent'
 import { INTRO_CONTENT_DELAY_MS } from '@/lib/introRevealTiming'
+import { getHeroStats, type HeroStats } from '@/lib/heroStats'
 
 const NAME = siteMetadata.author.toUpperCase()
 // Animated WebP re-encoded from the original GIF at 544px: the card renders it at 128px
@@ -23,6 +24,8 @@ interface StatDef {
   label: string
   pct: number
   display: string
+  overcharged?: boolean
+  description?: string
   barClassName: string
   iconClassName: string
   Icon: (props: { className?: string }) => JSX.Element
@@ -63,11 +66,6 @@ const STAT_VISUALS: Record<
   },
 }
 
-const STATS: StatDef[] = heroContent.stats.map((stat) => ({
-  ...stat,
-  ...STAT_VISUALS[stat.key],
-}))
-
 // The bars sit inside the card that itself fades/slides in via
 // `.intro-reveal-support` (INTRO_CONTENT_DELAY_MS delay + 420ms animation).
 // Starting the fill animation once that settles, rather than at the same
@@ -79,6 +77,7 @@ interface HeroStatCardProps {
   heading: string
   highlight?: string
   bio: string
+  initialStats: HeroStats
   postsCount: number
   projectsCount: number
   raceCurrentWeek: number
@@ -90,6 +89,7 @@ export default function HeroStatCard({
   heading,
   highlight,
   bio,
+  initialStats,
   postsCount,
   projectsCount,
   raceCurrentWeek,
@@ -97,6 +97,47 @@ export default function HeroStatCard({
   raceProgressPct,
 }: HeroStatCardProps) {
   const [tab, setTab] = useState<'bio' | 'status' | 'quests'>('bio')
+  const [liveStats, setLiveStats] = useState(initialStats)
+
+  useEffect(() => {
+    // Keep the first render identical to the server, then refresh even a cached homepage.
+    const refresh = () => setLiveStats(getHeroStats())
+    const visible = () => {
+      if (document.visibilityState === 'visible') refresh()
+    }
+    refresh()
+    const timer = window.setInterval(refresh, 60000)
+    window.addEventListener('focus', refresh)
+    document.addEventListener('visibilitychange', visible)
+    return () => {
+      window.clearInterval(timer)
+      window.removeEventListener('focus', refresh)
+      document.removeEventListener('visibilitychange', visible)
+    }
+  }, [])
+
+  const stats: StatDef[] = heroContent.stats.map(({ key, label }) => {
+    if (key === 'exp') {
+      const { years, pct } = liveStats.work
+      return {
+        key,
+        label,
+        pct,
+        display: `${years.toFixed(1)} yrs`,
+        description: `${years.toFixed(1)} yrs，進度 ${pct}%`,
+        ...STAT_VISUALS[key],
+      }
+    }
+    const meter = liveStats[key]
+    return {
+      key,
+      label,
+      pct: meter.pct,
+      display: `${meter.value}/100`,
+      overcharged: key === 'sleep' && liveStats.sleep.overcharged,
+      ...STAT_VISUALS[key],
+    }
+  })
 
   return (
     <div
@@ -120,19 +161,19 @@ export default function HeroStatCard({
         <div className="mt-4 flex items-start gap-3.5">
           <Avatar
             imageSizes="128px"
-            levelBadgeClassName="bottom-1.5 left-1.5 px-[7px] pb-px text-[9px]"
-            className="h-32 w-32 rounded-[20px] border-2"
+            levelBadgeClassName="bottom-1.5 left-1.5 h-5 px-[7px] text-[9px]"
+            className="h-32 w-32 rounded-[20px]"
           />
           <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-            <p className="text-lg font-extrabold leading-tight text-gray-900 dark:text-gray-100">
+            <p className="font-sans text-lg font-extrabold leading-tight text-gray-900 dark:text-gray-100">
               {NAME}
             </p>
-            <p className="-mt-1 mb-0.5 flex items-center gap-1 text-[11.5px] font-bold uppercase tracking-wider text-primary-500">
+            <p className="-mt-1 mb-0.5 flex items-center gap-1 font-sans text-[11.5px] font-bold uppercase tracking-wider text-primary-500">
               <LaptopIcon className="h-3 w-3 shrink-0" />
               {heroContent.jobTitle}
             </p>
             <div className="mt-1 flex flex-col gap-1.5">
-              {STATS.map(({ key, ...stat }, index) => (
+              {stats.map(({ key, ...stat }, index) => (
                 <StatBar
                   key={key}
                   {...stat}
@@ -180,21 +221,21 @@ export default function HeroStatCard({
         <div className="flex flex-col gap-4">
           <Avatar
             imageSizes="272px"
-            levelBadgeClassName="bottom-2.5 left-2.5 px-[9px] pb-[3px] pt-px text-[13px]"
-            className="aspect-square w-full rounded-[18px] border-[3px]"
+            levelBadgeClassName="bottom-2.5 left-2.5 h-7 px-[9px] text-[13px]"
+            className="aspect-square w-full rounded-[18px]"
           />
           <div>
-            <p className="text-2xl font-extrabold leading-tight text-gray-900 dark:text-gray-100">
+            <p className="font-sans text-2xl font-extrabold leading-tight text-gray-900 dark:text-gray-100">
               {NAME}
             </p>
-            <p className="flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-primary-500">
+            <p className="flex items-center gap-1 font-sans text-xs font-bold uppercase tracking-wider text-primary-500">
               <LaptopIcon className="h-3.5 w-3.5 shrink-0" />
               {heroContent.jobTitle}
             </p>
           </div>
           <hr className="-my-1.5 border-t border-dashed border-gray-200 dark:border-gray-700" />
           <div className="flex flex-col gap-1.5">
-            {STATS.map(({ key, ...stat }, index) => (
+            {stats.map(({ key, ...stat }, index) => (
               <StatBar
                 key={key}
                 {...stat}
@@ -340,13 +381,13 @@ function Avatar({
   className,
 }: {
   imageSizes: string
-  /** Position (inset from the corner) + padding + text-size classes for the
-   *  level badge at this call site (e.g. "bottom-1.5 left-1.5 px-[7px] pb-px
+  /** Position (inset from the corner) + size + text-size classes for the
+   *  level badge at this call site (e.g. "bottom-1.5 left-1.5 h-5 px-[7px]
    *  text-[9px]"). Kept as one literal prop for the same reason as `className`
    *  below. */
   levelBadgeClassName: string
-  /** Complete size + corner-radius + border-width classes for this call site
-   *  (e.g. "h-32 w-32 rounded-[20px] border-2"). Kept as one literal prop,
+  /** Complete size + corner-radius classes for this call site
+   *  (e.g. "h-32 w-32 rounded-[20px]"). Kept as one literal prop,
    *  never split into a "base default + override" pair — two utility classes
    *  for the same property (e.g. rounded-[20px] here and rounded-[18px] from
    *  a caller) would both land in the compiled stylesheet, and which one wins
@@ -363,9 +404,7 @@ function Avatar({
     // sharp edge poking past the curve). Sitting the badge fully inside the
     // image, clipped the same way as everything else in this box, sidesteps
     // that whole class of bug.
-    <div
-      className={`relative shrink-0 overflow-hidden border-primary-500 bg-gray-100 dark:bg-gray-800 ${className}`}
-    >
+    <div className={`relative shrink-0 overflow-hidden bg-gray-100 dark:bg-gray-800 ${className}`}>
       <Image
         src={AVATAR_SRC}
         alt={siteMetadata.author}
@@ -377,7 +416,7 @@ function Avatar({
         className="h-full w-full object-cover [image-rendering:pixelated]"
       />
       <div
-        className={`absolute rounded-md bg-primary-500 font-extrabold text-[#1a0800] ${levelBadgeClassName}`}
+        className={`absolute inline-flex items-center justify-center rounded-md bg-gray-500/80 font-semibold leading-none text-white ${levelBadgeClassName}`}
       >
         {heroContent.avatarLevel}
       </div>
@@ -389,15 +428,25 @@ function StatBar({
   label,
   pct,
   display,
+  overcharged,
+  description,
   barClassName,
   iconClassName,
   Icon,
   delayMs,
 }: Omit<StatDef, 'key'> & { delayMs: number }) {
   return (
-    <div className="flex items-center gap-1.5">
+    <div className="flex items-center gap-1.5" title={description}>
       <Icon className={`h-3 w-3 shrink-0 sm:h-3.5 sm:w-3.5 ${iconClassName}`} />
-      <div className="relative h-[11px] flex-1 overflow-hidden rounded-md border border-gray-200 bg-gray-100 dark:border-gray-700 dark:bg-gray-800">
+      <div
+        role="progressbar"
+        aria-label={label}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={pct}
+        aria-valuetext={description || display}
+        className="relative h-[11px] flex-1 overflow-hidden rounded-md border border-gray-200 bg-gray-100 dark:border-gray-700 dark:bg-gray-800"
+      >
         <div
           className={`stat-bar-fill h-full rounded-md ${barClassName}`}
           style={
@@ -411,7 +460,9 @@ function StatBar({
           {label}
         </span>
       </div>
-      <span className="shrink-0 font-mono text-[8px] text-gray-500 dark:text-gray-400 sm:text-[10px]">
+      <span
+        className={`shrink-0 font-mono text-[8px] sm:text-[10px] ${overcharged ? 'text-red-600 dark:text-red-400' : 'text-gray-500 dark:text-gray-400'}`}
+      >
         {display}
       </span>
     </div>

@@ -136,7 +136,7 @@ export default function PostLayout({
                         </div>
                       )}
                       {(next || prev) && (
-                        <div className="flex justify-between py-4 xl:block xl:space-y-8 xl:py-8">
+                        <div className="flex justify-between gap-x-6 py-4 sm:gap-x-8 xl:block xl:space-y-8 xl:py-8">
                           {prev && prev.path && (
                             <div>
                               <h2 className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
@@ -173,7 +173,21 @@ export default function PostLayout({
                 </div>
               </aside>
 
-              <div className="order-2 min-w-0 lg:col-start-1 lg:row-start-2 xl:col-start-2 xl:row-start-1">
+              <aside className="order-2 min-w-0 border-b border-gray-200 py-8 dark:border-gray-700 lg:col-start-2 lg:row-start-2 lg:self-stretch lg:border-b-0 lg:pt-10 xl:col-start-3 xl:row-start-1">
+                <nav aria-label="文章目錄" className="lg:sticky lg:top-32">
+                  <h2 className="mb-4 text-lg font-bold lg:text-xl">目錄</h2>
+                  <TOCInline
+                    ulClassName="space-y-2 lg:max-h-[calc(100dvh-12rem)] lg:overflow-y-auto"
+                    liClassName="list-none break-words text-sm leading-6 hover:text-primary-500 [&_a]:inline-block [&_a]:py-1 lg:[&_a]:py-0"
+                    toc={content.toc}
+                    exclude="Overview"
+                    toHeading={4}
+                    fromHeading={2}
+                  />
+                </nav>
+              </aside>
+
+              <div className="order-3 min-w-0 lg:col-start-1 lg:row-start-2 xl:col-start-2 xl:row-start-1">
                 <div className="prose max-w-none border-b border-gray-200 pb-8 pt-10 dark:prose-invert dark:border-gray-700 xl:border-b-0">
                   {children}
                 </div>
@@ -209,18 +223,6 @@ export default function PostLayout({
                   </section>
                 )}
               </div>
-
-              <aside className="order-3 hidden pb-8 pt-10 lg:sticky lg:top-32 lg:col-start-2 lg:row-start-2 lg:block lg:self-start xl:col-start-3 xl:row-start-1">
-                <h2 className="mb-4 text-xl font-bold">目錄</h2>
-                <TOCInline
-                  ulClassName="space-y-2 overflow-y-auto"
-                  liClassName="list-none text-sm leading-6 hover:text-primary-500"
-                  toc={content.toc}
-                  exclude="Overview"
-                  toHeading={4}
-                  fromHeading={2}
-                />
-              </aside>
             </div>
 
             {siteMetadata.comments && (

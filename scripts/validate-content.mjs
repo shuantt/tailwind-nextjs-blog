@@ -7,7 +7,15 @@ const postsDirectory = path.join(root, 'data', 'posts')
 const authorsDirectory = path.join(root, 'data', 'authors')
 const publicDirectory = path.join(root, 'public')
 const allowedLayouts = new Set(['PostLayout', 'PostSimple', 'PostBanner'])
-const staticRoutes = new Set(['/', '/about', '/posts', '/projects', '/tags', '/categories'])
+const staticRoutes = new Set([
+  '/',
+  '/about',
+  '/posts',
+  '/timeline',
+  '/projects',
+  '/tags',
+  '/categories',
+])
 const errors = []
 
 function findContentFiles(directory) {

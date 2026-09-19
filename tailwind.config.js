@@ -68,8 +68,21 @@ module.exports = {
             h3: {
               fontWeight: '600',
             },
-            code: {
-              color: theme('colors.secondary.500'),
+            ':not(pre) > code': {
+              color: theme('colors.secondary.600'),
+              backgroundColor: theme('colors.gray.100'),
+              border: `1px solid ${theme('colors.gray.200')}`,
+              borderRadius: '0.25rem',
+              padding: '0.12em 0.35em',
+              fontWeight: '500',
+              overflowWrap: 'anywhere',
+              boxDecorationBreak: 'clone',
+            },
+            'code::before': {
+              content: 'none',
+            },
+            'code::after': {
+              content: 'none',
             },
           },
         },
@@ -84,6 +97,11 @@ module.exports = {
             },
             'h1,h2,h3,h4,h5,h6': {
               color: theme('colors.gray.100'),
+            },
+            ':not(pre) > code': {
+              color: theme('colors.secondary.300'),
+              backgroundColor: theme('colors.gray.800'),
+              borderColor: theme('colors.gray.700'),
             },
           },
         },

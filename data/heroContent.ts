@@ -2,8 +2,7 @@
 // it can be edited without touching component code. Visual/layout choices
 // (Tailwind classes, colors, spacing, corner radii, etc.) stay in
 // components/HeroStatCard.tsx and components/IntroReveal.tsx — this file is
-// text and the small set of numbers that ride along with it (stat bar
-// percentages, the character level).
+// text and the character level. Live stat values are calculated in lib/heroStats.ts.
 
 export interface TitleChipContent {
   /** Short badge text (e.g. "半馬菜鳥"). */
@@ -19,10 +18,6 @@ export interface StatBarContent {
   key: 'coffee' | 'sleep' | 'exp'
   /** Text shown inside the bar itself (e.g. "COFFEE"). */
   label: string
-  /** Fill percentage, 0-100. */
-  pct: number
-  /** Text shown to the right of the bar (e.g. "82/100", "3.5 yrs"). */
-  display: string
 }
 
 export interface HeroContent {
@@ -92,9 +87,9 @@ const heroContent: HeroContent = {
     { label: '白日夢', hint: '還在摸索真正想做的事' },
   ],
   stats: [
-    { key: 'coffee', label: 'COFFEE', pct: 82, display: '80/100' },
-    { key: 'sleep', label: 'SLEEP', pct: 65, display: '65/100' },
-    { key: 'exp', label: 'WORK EXP', pct: 70, display: '3.5 yrs' },
+    { key: 'coffee', label: 'COFFEE' },
+    { key: 'sleep', label: 'SLEEP' },
+    { key: 'exp', label: 'EXP.' },
   ],
   statusItems: {
     posts: { name: '貼文數', unit: '篇' },

@@ -1,0 +1,143 @@
+.blog-comments {
+  --at-color-main: theme('colors.primary.600');
+  --at-color-font: theme('colors.gray.800');
+  --at-color-grey: theme('colors.gray.500');
+  --at-color-border: theme('colors.gray.200');
+  --at-color-bg: transparent;
+  --at-color-bg-transl: transparent;
+  --comment-input-bg: theme('colors.gray.50');
+  font-family: inherit;
+  text-align: left;
+}
+
+.dark .blog-comments {
+  --at-color-main: theme('colors.primary.400');
+  --at-color-font: theme('colors.gray.200');
+  --at-color-grey: theme('colors.gray.400');
+  --at-color-border: theme('colors.gray.700');
+  --at-color-bg: transparent;
+  --at-color-bg-transl: transparent;
+  --comment-input-bg: theme('colors.gray.900');
+}
+
+.blog-comments .atk-main-editor {
+  border-radius: 0.75rem;
+}
+
+.blog-comments .atk-main-editor > .atk-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 1rem;
+  padding: 1rem 1rem 0;
+}
+
+.blog-comments .comment-field {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.375rem;
+  color: var(--at-color-font);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.blog-comments .comment-field-email {
+  grid-column: 1 / -1;
+}
+
+.blog-comments .atk-main-editor > .atk-header input,
+.blog-comments .atk-main-editor > .atk-textarea-wrap > .atk-textarea {
+  box-sizing: border-box;
+  min-width: 0;
+  width: 100%;
+  margin: 0;
+  padding: 0.625rem 0.75rem;
+  border: 1px solid var(--at-color-border);
+  border-radius: 0.5rem;
+  background: var(--comment-input-bg);
+  color: var(--at-color-font);
+  font-size: 1rem;
+  line-height: 1.5;
+  box-shadow: none;
+}
+
+.blog-comments .atk-main-editor > .atk-textarea-wrap {
+  margin: 1rem 1rem 0;
+}
+
+.blog-comments .atk-main-editor > .atk-textarea-wrap > .atk-textarea {
+  min-height: 8rem;
+}
+
+.blog-comments .atk-main-editor > .atk-header input:focus,
+.blog-comments .atk-main-editor > .atk-textarea-wrap > .atk-textarea:focus {
+  border-color: var(--at-color-main);
+  outline: 2px solid var(--at-color-main);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+.blog-comments .atk-main-editor > .atk-bottom {
+  padding: 0.75rem 1rem;
+}
+
+/* Buttons share the site's action colors, independently of comment link colors. */
+.blog-comments .atk-main-editor > .atk-bottom .atk-send-btn {
+  background-color: theme('colors.primary.600');
+  color: theme('colors.white');
+}
+
+.blog-comments .atk-main-editor > .atk-bottom .atk-send-btn:hover {
+  background-color: theme('colors.primary.700');
+}
+
+.dark .blog-comments .atk-main-editor > .atk-bottom .atk-send-btn {
+  background-color: theme('colors.primary.500');
+  color: theme('colors.white');
+}
+
+.dark .blog-comments .atk-main-editor > .atk-bottom .atk-send-btn:hover {
+  background-color: theme('colors.primary.400');
+}
+
+.blog-comments .atk-comment-wrap {
+  overflow-wrap: anywhere;
+}
+
+/* Floating menus need an opaque surface above the transparent comment area. */
+.blog-comments .atk-dropdown {
+  --at-color-bg: theme('colors.white');
+}
+
+.dark .blog-comments .atk-dropdown {
+  --at-color-bg: theme('colors.gray.900');
+}
+
+.blog-comments .atk-comment > .atk-avatar img {
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.blog-comments .atk-comment-wrap > .atk-comment > .atk-main > .atk-header .atk-badge {
+  border: 1px solid theme('colors.primary.200');
+  background-color: theme('colors.primary.50');
+  color: theme('colors.primary.800');
+  font-weight: 600;
+}
+
+.dark .blog-comments .atk-comment-wrap > .atk-comment > .atk-main > .atk-header .atk-badge {
+  border-color: theme('colors.primary.700');
+  background-color: theme('colors.primary.900');
+  color: theme('colors.primary.100');
+}
+
+/* Keep visitor notifications and admin navigation out of the public comment UI. */
+.blog-comments [data-action='open-sidebar'] {
+  display: none;
+}
+
+.blog-comments button:focus-visible,
+.blog-comments a:focus-visible {
+  outline: 2px solid var(--at-color-main);
+  outline-offset: 3px;
+}

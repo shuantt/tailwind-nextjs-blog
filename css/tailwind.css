@@ -59,6 +59,18 @@ input:-webkit-autofill:focus {
   vertical-align: middle;
 }
 
+/* Keep the pixel-font trial scoped to the homepage Hero, including its numeric labels. */
+.hero-pixel-text,
+.hero-pixel-text .font-mono {
+  font-family: var(--font-hero-latin), var(--font-hero-pixel), monospace;
+  font-synthesis: none;
+}
+
+/* Keep pixel text semibold; sans-serif headings retain their original weights. */
+.hero-pixel-text :where(.font-extrabold, .font-bold, .font-semibold):not(.font-sans) {
+  font-weight: 600;
+}
+
 .intro-reveal {
   --intro-mask-color: rgb(17 24 39);
 }

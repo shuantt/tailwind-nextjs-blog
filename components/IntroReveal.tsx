@@ -147,7 +147,7 @@ export default function IntroReveal({ heading, paragraphs, highlight }: IntroRev
   return (
     <div className="intro-reveal relative overflow-hidden">
       <div className="intro-reveal-content">
-        <h1 className="text-lg font-bold tracking-tight text-gray-900 dark:text-gray-100 md:text-xl xl:text-2xl">
+        <h1 className="font-sans text-lg font-bold tracking-tight text-gray-900 dark:text-gray-100 md:text-xl xl:text-2xl">
           {/* Full heading for screen readers / SEO, available immediately */}
           <span className="sr-only">{heading}</span>
           <span aria-hidden="true">

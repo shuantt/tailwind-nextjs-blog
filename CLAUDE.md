@@ -24,7 +24,7 @@ Cursor 等）的**唯一規範來源**。`AGENTS.md` 只負責把讀者導向這
   基底是 Tailwind Next.js Starter Blog 2.3.0，已大量客製：品牌與霓虹橘主題色、首頁 Hero 動畫與
   RPG 風格狀態卡、Category + Tags 雙層分類、Pages CMS 手機寫作流程。
 - 技術棧：Next.js 15.5 App Router、React 18、TypeScript、Tailwind CSS 3。
-  MDX 由 `contentlayer2` 編譯；`pliny` 提供文章工具、KBar 搜尋、Google Analytics 與 Giscus 留言。
+  MDX 由 `contentlayer2` 編譯；`pliny` 提供文章工具、KBar 搜尋與 Google Analytics，文章留言使用 Artalk。
 - 套件管理：Yarn 3.6.1（釘在 `.yarn/releases`，使用 `node-modules` linker），Node >= 20.9。
 - 部署：Vercel Git integration。feature branch 產生 Preview；push 到 `main` 產生 Production。
   因此 `main` 上不要放未完成的文章或半成品程式碼。
@@ -64,13 +64,14 @@ Cursor 等）的**唯一規範來源**。`AGENTS.md` 只負責把讀者導向這
 | `layouts/`                      | `PostLayout`、`PostSimple`、`PostBanner`、列表版型、`AuthorLayout`                              |
 | `lib/content.ts`                | `publishedBlogs`、`POSTS_PER_PAGE`、標籤索引門檻與分類／標籤查詢；頁面一律從這裡取文章          |
 | `lib/raceCountdown.ts`          | 半馬訓練倒數計算（首頁 QUEST 列）                                                               |
+| `lib/heroStats.ts`              | 台北時間的 Coffee、每日 Sleep 與工作年資進度計算                                               |
 | `lib/introRevealTiming.ts`      | 首頁動畫時間常數，刻意不加 `'use client'` 以便 Server Component 匯入                            |
 | `data/posts/`                   | 已發布 MDX 文章（扁平結構）                                                                     |
 | `data/draft/`                   | 草稿與參考範例，Contentlayer 以 `contentDirExclude` 排除                                        |
 | `data/authors/`                 | 作者檔案，目前有 `default`（Shuan Tseng）與 `sparrowhawk`                                       |
 | `data/categoryData.ts`          | 三個固定分類的 label 與 slug                                                                    |
-| `data/heroContent.ts`           | 首頁 Hero 所有文案與數字，視覺留在元件內                                                        |
-| `data/siteMetadata.js`          | 站台身分、語系、網址、GA、Giscus、KBar 設定                                                     |
+| `data/heroContent.ts`           | 首頁 Hero 文案與固定數字，動態數值由 `lib/heroStats.ts` 計算，視覺留在元件內                     |
+| `data/siteMetadata.js`          | 站台身分、語系、網址、GA、Artalk、KBar 設定                                                     |
 | `data/headerNavLinks.ts`        | 頁首導覽                                                                                        |
 | `data/projectsData.ts`          | Projects 頁內容                                                                                 |
 | `data/references-data.bib`      | `bibliography` 引用資料                                                                         |
@@ -82,7 +83,7 @@ Cursor 等）的**唯一規範來源**。`AGENTS.md` 只負責把讀者導向這
 | `tailwind.config.js`            | 全站配色統一入口：`primary`（自訂霓虹橘色階）、`secondary`（indigo）                            |
 | `next.config.js`                | CSP 與安全標頭、圖片 remotePatterns、舊路徑 redirect、bundle analyzer                           |
 | `.pages.yml`                    | Pages CMS 的內容集合、欄位、分類選項與 commit 訊息模板                                          |
-| `.github/workflows/quality.yml` | PR 與非 `main` 分支的 CI：`yarn check` 與靜態匯出 `yarn build`                                  |
+| `.github/workflows/quality.yml` | PR 與非 `main` 分支的 CI：`yarn check`、`yarn guestbook:test`、`yarn hero:test` 與 `yarn build` |
 | `.husky/pre-commit`             | `lint-staged`：對暫存的 js/ts 跑 `eslint --fix`，對 js/ts/json/css/md/mdx 跑 `prettier --write` |
 | `faq/`                          | 本地說明：手機寫作、自訂 MDX 元件、KBar 搜尋、Docker 部署                                       |
 
@@ -102,14 +103,21 @@ yarn typecheck             # tsc --noEmit
 yarn content:build         # contentlayer2 build，同時重生 tag-data / category-data / search.json
 yarn content:check         # 執行 scripts/validate-content.mjs
 yarn check                 # content:build + lint + typecheck + content:check
+yarn guestbook:test        # 隔離測試 Guestbook API、資料庫限制與管理登入，不連外
+yarn hero:test             # 驗證台北時間、每日 Sleep 範圍、工作周年與血條進度
+yarn artalk:build          # 下載並驗證固定版本 Artalk，編譯 Go 服務（需 Go 1.26.5）
+yarn artalk:test           # Artalk 原有測試與本站整合測試
+yarn artalk:smoke          # 編譯後執行隔離的 API 流程與重啟測試
+yarn artalk:demo           # 編譯後啟動本機示範服務，搭配 Next.js 的 3090 port
+yarn artalk:local          # 本機 GitHub 登入；啟動器載入 OAuth 設定，使用本機 SQLite
 ```
 
 - Windows PowerShell 5.1 不支援 `&&`；若執行原則擋住 `yarn.ps1`，改用 `yarn.cmd` 或
   `node .yarn/releases/yarn-3.6.1.cjs <script>`。
-- CI 只在 pull request、非 `main` 的 push 與手動觸發時執行，內容為 `yarn check` 加上
-  `EXPORT=1 UNOPTIMIZED=1 yarn build`（靜態匯出）。靜態匯出模式下 `next.config.js` 的
-  headers 與 redirects **不會**生效，所以 CI 不會驗證它們，只有 Vercel 部署會。
-- 目前沒有 repository 自有的單元或瀏覽器測試；`yarn.lock` 裡的測試套件是間接相依，不算專案測試。
+- CI 只在 pull request、非 `main` 的 push 與手動觸發時執行，內容為 `yarn check`、
+  `yarn guestbook:test`、`yarn hero:test` 與一般 `yarn build`。Guestbook 需要後端，整站不再支援純靜態匯出。
+- `scripts/guestbook.test.mjs` 使用 Node test runner 與隔離的 PGlite，驗證 Guestbook API、
+  SQL 限制、公開／私密資料隔離與管理登入；不讀取真實環境檔，不連接 Neon 或寄信。
 
 ## 5. 接收任務時須注意（動手前）
 
@@ -201,8 +209,8 @@ yarn check                 # content:build + lint + typecheck + content:check
 - 介面文字與各頁 h1 的英文（`Projects`、`Tags`、`Read more` 等）是刻意的設計決定，不要為了 SEO
   改成中文；搜尋用的中文關鍵字放在 `<title>`、description 與結構化資料。
 - 首頁 Hero 的文案改 `data/heroContent.ts`，視覺改 `components/HeroStatCard.tsx` 與
-  `components/IntroReveal.tsx`。與日期有關的計算保持在伺服器端（見 `lib/raceCountdown.ts` 的
-  註解），避免 hydration mismatch。
+  `components/IntroReveal.tsx`。日期相關初始值由伺服器傳入，避免 hydration mismatch；
+  Coffee、Sleep、Work 由 `lib/heroStats.ts` 計算，掛載後每分鐘及返回頁面時更新。
 - 文章列表與統計一律從 `lib/content.ts` 的 `publishedBlogs` 取得，不要直接使用未過濾的
   `allBlogs`。
 - 保持變更聚焦：不重排無關檔案、不覆寫使用者變更、不做「順手」重構。
@@ -222,11 +230,32 @@ yarn check                 # content:build + lint + typecheck + content:check
   只用 `.env.example` 認識變數名稱，不要捏造值。
 - `NEXT_PUBLIC_` 開頭的變數會暴露到瀏覽器；其他整合金鑰必須留在伺服器端。
 - 新增外部 script、iframe、圖片來源、分析或留言服務時，必須同步審慎更新 `next.config.js` 的
-  Content Security Policy；目前允許的第三方為 Giscus、Google Tag Manager 與 Umami。
-- Google Analytics ID、Giscus 設定、KBar 搜尋設定都在 `data/siteMetadata.js`，不要當成清理項目
+  Content Security Policy；目前允許的第三方為 Google Tag Manager、Umami 與 Cloudflare Turnstile。
+- Google Analytics ID、Artalk 設定、KBar 搜尋設定都在 `data/siteMetadata.js`，不要當成清理項目
   修改。
-- 現有公開頁面都在 Vercel 建置時預先渲染，沒有自訂 API route。只有產品明確需要時才加入 route
-  handler 或 Server Action，並保持 Vercel 與標準 Next.js 相容。
+- 文章等既有頁面維持預先渲染。`/guestbook` 是免登入的公開留言板，
+  網址或 Email 至少填一項，既有私密資料仍維持私密。
+  `/guestbook/admin` 僅允許指定 GitHub 數字 ID 登入；`app/api/guestbook/` 使用 Node.js Route Handlers。
+  Neon schema 在 `db/guestbook.sql`，功能摘要在 `faq/guestbook.md`。
+- Guestbook 公開 API 只可查詢 `visibility = public` 且 `status = approved` 的明確欄位，
+  禁止回傳 Email、私密訊息或管理欄位。訪客的公開選擇不可修改，SQL trigger 與 API 都須維持此限制。
+- Guestbook 訊息先儲存，再嘗試 Gmail 通知。管理登入共用 Artalk 的 GitHub 站主權杖，
+  後端每次操作向固定設定來源驗證簽章、期限與目前站主綁定，不接受舊 Guestbook Cookie；
+  所有變更操作須檢查身分（管理操作）與同源 Origin。保持 Vercel 與標準 Next.js 相容。
+- Guestbook 收件必須通過 Turnstile 伺服器驗證（hostname + action）與明確聯絡同意，缺少金鑰不可跳過。
+  唯一公開驗證設定為 `NEXT_PUBLIC_TURNSTILE_SITE_KEY`，secret 留在伺服器。
+  `/privacy`、同意文案與 `lib/guestbook/privacy.ts` 版本需一致；保存同意時間及版本，不保存驗證權杖。
+- 本 repository 公開。隱私權頁面只提供必要的資料處理告知；移除的技術細節不要另存維護文件。
+  文件避免額外列出內部操作細節或實際環境資訊；憑證與私人資料不得寫入 repository。
+- Artalk 的可執行整合位於 `services/artalk/`，與 Next.js 透過 `vercel.json` 的 Services 設定共存。
+  固定上游版本並驗證下載雜湊；`.upstream/` 與 `bin/` 是忽略的建置產物，不可提交。
+  修改整合時需跑 `artalk:test`、`artalk:build`、`artalk:smoke`；本機示範使用隔離暫存資料，
+  不讀取環境檔，也不能作為已完成正式部署或外部登入／通知驗證的證據。
+  Artalk 站主管理只接受指定 GitHub 數字 ID 的 OAuth 登入；不得以暱稱或 Email 合併管理身分。
+  密碼登入僅供隔離本機測試，正式環境停用；頁尾齒輪提供 Artalk 入口，「站主已登入」連至 Guestbook 管理，
+  未登入時前往 GitHub 站主登入頁，不提供訪客通知中心。
+  `artalk:local` 啟動器可在使用者要求啟用本機登入時載入 `.env.local` 的三項 GitHub 設定，
+  不輸出值、不轉送其他金鑰；`.artalk-local/` 為忽略的本機資料。Agents 不得藉此檢視環境檔內容。
 
 ### 6.6 生成檔與建置產物
 

@@ -46,3 +46,8 @@ yarn-error.log*
 
 # Contentlayer
 .contentlayer
+
+# Artalk source cache and compiled service
+/services/artalk/.upstream/
+/services/artalk/bin/
+/.artalk-local/

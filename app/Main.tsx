@@ -14,8 +14,10 @@ import StaggeredList from '@/components/StaggeredList'
 import HeroStatCard from '@/components/HeroStatCard'
 import heroContent from '@/data/heroContent'
 import { getRaceProgress } from '@/lib/raceCountdown'
+import { getHeroStats } from '@/lib/heroStats'
 import { INTRO_LIST_DELAY_MS } from '@/lib/introRevealTiming'
 import type { CSSProperties } from 'react'
+import { heroLatin, heroPixel } from './fonts/hero-fonts'
 
 const MAX_DISPLAY = 8
 
@@ -28,11 +30,14 @@ export default function Home({ posts }: HomeProps) {
 
   return (
     <>
-      <section className="my-8 sm:my-12">
+      <section
+        className={`${heroLatin.variable} ${heroPixel.variable} hero-pixel-text my-8 sm:my-12`}
+      >
         <HeroStatCard
           heading={heroContent.heading}
           highlight={heroContent.highlight}
           bio={heroContent.bio}
+          initialStats={getHeroStats()}
           postsCount={posts.length}
           projectsCount={projectsData.length}
           raceCurrentWeek={raceProgress.currentWeek}

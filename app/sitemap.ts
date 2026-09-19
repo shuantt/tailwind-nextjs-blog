@@ -22,9 +22,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const routes: MetadataRoute.Sitemap = [
     { url: `${siteUrl}/`, lastModified: newestPost },
     { url: `${siteUrl}/posts`, lastModified: newestPost },
+    { url: `${siteUrl}/timeline`, lastModified: newestPost },
     { url: `${siteUrl}/tags`, lastModified: newestPost },
     { url: `${siteUrl}/about` },
     { url: `${siteUrl}/projects` },
+    { url: `${siteUrl}/guestbook` },
+    { url: `${siteUrl}/privacy` },
   ]
 
   const categoryRoutes = categoryConfig.flatMap((category) => {

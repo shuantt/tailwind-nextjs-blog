@@ -73,6 +73,7 @@ export default function ListLayoutWithTags({
   description,
 }: ListLayoutProps) {
   const pathname = usePathname()
+  const isPostsPage = pathname === '/posts' || pathname.startsWith('/posts/page/')
   const tagCounts = tagData as Record<string, number>
   const categoryCounts = categoryData as Record<string, number>
   const tagKeys = Object.keys(tagCounts)
@@ -274,10 +275,27 @@ export default function ListLayoutWithTags({
   return (
     <>
       <div>
-        <div className="pb-6 pt-6">
-          <h1 className="text-2xl font-extrabold tracking-wide text-gray-900 dark:text-gray-100 sm:text-2xl md:text-4xl lg:hidden">
+        <div
+          className={
+            isPostsPage
+              ? 'flex flex-wrap items-center justify-between gap-4 pb-6 pt-6'
+              : 'pb-6 pt-6'
+          }
+        >
+          <h1
+            className={`text-2xl font-extrabold tracking-wide text-gray-900 dark:text-gray-100 sm:text-2xl md:text-4xl ${isPostsPage ? '' : 'lg:hidden'}`}
+          >
             {title}
           </h1>
+          {isPostsPage && (
+            <Link
+              href="/timeline"
+              className="ml-auto inline-flex items-center gap-2 py-2 text-sm font-medium text-gray-600 transition-colors hover:text-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-500 dark:text-gray-300 dark:hover:text-primary-400"
+            >
+              <span className="underline underline-offset-4">查看歷年文章</span>
+              <span aria-hidden="true">→</span>
+            </Link>
+          )}
           {description && (
             <p className="mt-2 text-base leading-7 text-gray-500 dark:text-gray-400 lg:mt-0">
               {description}
